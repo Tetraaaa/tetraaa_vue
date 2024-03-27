@@ -1,0 +1,123 @@
+[
+    {
+        "name": "Site développé par moi :)",
+        "link": "https://tetraaa.fr",
+        "priority": 5
+    },
+    {
+        "name": "Inspirations pour les pages dans le style de NieR:Automata",
+        "priority": 3
+    },
+    {
+        "name": "Codepen de @metakirby5",
+        "link": "https://metakirby5.github.io/yorha/",
+        "priority": 2
+    },
+    {
+        "name": "Codepen de @levise",
+        "link": "https://codepen.io/levise/pen/vMzEwr",
+        "priority": 2
+    },
+    {
+        "name": "Codepen de @RobotsPlay",
+        "link": "https://codepen.io/RobotsPlay/pen/bGeNGdx",
+        "priority": 2
+    },
+    {
+        "name": "Polices utilisées",
+        "priority": 3
+    },
+    {
+        "name": "Rodin",
+        "link": "https://www.onlinewebfonts.com/download/2c9a22e9912338d683afff5b3b0cc59c",
+        "priority": 2
+    },
+    {
+        "name": "Pacifico",
+        "link": "https://fonts.google.com/specimen/Pacifico",
+        "priority": 2
+    },
+    {
+        "name": "Rubik",
+        "link": "https://fonts.google.com/specimen/Rubik",
+        "priority": 2
+    },
+    {
+        "name": "Références et inspirations",
+        "priority": 3
+    },
+    {
+        "name": "NieR:Automata",
+        "link": "https://store.steampowered.com/app/523220/NieRAutomata/",
+        "priority": 2
+    },
+    {
+        "name": "Nier Replicant ver.1.22474487139...",
+        "link": "https://store.steampowered.com/app/1113560/NieR_Replicant_ver122474487139/",
+        "priority": 2
+    },
+    {
+        "name": "Daft Punk",
+        "link": "https://www.daftpunk.com/",
+        "priority": 2
+    },
+    {
+        "name": "Neon Genesis Evangelion",
+        "link": "https://www.evangelion.co.jp/",
+        "priority": 2
+    },
+    {
+        "name": "Yprac",
+        "link": "https://www.yprac.com/",
+        "priority": 2
+    },
+    {
+        "name": "Dofus",
+        "link": "https://www.dofus.com/fr",
+        "priority": 2
+    },
+    {
+        "name": "Conway's Game of Life",
+        "link": "https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life",
+        "priority": 2
+    },
+    {
+        "name": "Technos, librairies et outils",
+        "priority": 3
+    },
+    {
+        "name": "Loading.io",
+        "link": "https://loading.io/",
+        "priority": 2
+    },
+    {
+        "name": "Mantine",
+        "link": "https://mantine.dev/",
+        "priority": 2
+    },
+    {
+        "name": "Codepen de @sarazond",
+        "link": "https://codepen.io/sarazond/pen/LYGbwj",
+        "priority": 2
+    },
+    {
+        "name": "VueJS",
+        "link": "https://vuejs.org/",
+        "priority": 2
+    },
+    {
+        "name": "Astro",
+        "link": "https://astro.build/",
+        "priority": 2
+    },
+    {
+        "name": "React",
+        "link": "https://react.dev/",
+        "priority": 2
+    },
+    {
+        "name": "Photomode pour NieR:Automata",
+        "link": "https://opm.fransbouma.com/Cameras/nierautomata.htm",
+        "priority": 2
+    }
+]

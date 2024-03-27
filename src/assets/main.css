@@ -1,0 +1,16 @@
+@import './base.css';
+
+@font-face {
+  font-family: "Rodin";
+  src: url("../assets/fonts/FOT_Rodin_Pro_DB.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: "Rodin-Medium";
+  src: url("../assets/fonts/FOT_Rodin_Pro_M.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
