@@ -1,4 +1,3 @@
-
 <script setup lang="ts">
 const emit = defineEmits(['click'])
 
@@ -31,7 +30,7 @@ button {
     border: none;
     border-top: transparent 3px solid;
     border-bottom: transparent 3px solid;
-    padding: 8px 8px 7px;
+    padding: 8px clamp(4px, 1vw, 8px) 7px;
     line-height: 1;
     cursor: pointer;
     text-align: left;

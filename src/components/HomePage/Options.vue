@@ -20,7 +20,8 @@ const selectedSection = ref<'Site' | 'Affichage' | 'Musique & Son' | 'Autre' | n
                 <NierButton @click="selectedSection = 'Site'">Site</NierButton>
             </Transition>
             <Transition appear>
-                <NierButton @click="selectedSection = 'Affichage'" style="transition-delay: 0.05s;">Affichage</NierButton>
+                <NierButton @click="selectedSection = 'Affichage'" style="transition-delay: 0.05s;">Affichage
+                </NierButton>
             </Transition>
             <Transition appear>
                 <NierButton style="transition-delay: 0.1s;" @click="selectedSection = 'Musique & Son'">Musique & Son
@@ -53,7 +54,7 @@ const selectedSection = ref<'Site' | 'Affichage' | 'Musique & Son' | 'Autre' | n
 
 .content {
     display: flex;
-    gap: 3rem;
+    gap: clamp(0rem, 2vw, 3rem);
     height: 100%;
 }
 
