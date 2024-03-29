@@ -18,6 +18,22 @@ const routes = [
         component: () => import('./pages/DaftPage.vue'),
     },
     {
+        path:'/github',
+        component: () => null,
+        beforeEnter:() => {
+            window.location.href = "https://github.com/Tetraaaa"
+            return false;
+        }
+    },
+    {
+        path:'/roguelike',
+        component: () => null,
+        beforeEnter:() => {
+            window.location.href = "https://tetraaa.itch.io/prototype-rogue-like"
+            return false;
+        }
+    },
+    {
         path:'/life',
         component: () => import('./pages/LifePage.vue'),
     },

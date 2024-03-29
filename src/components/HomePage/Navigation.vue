@@ -8,9 +8,9 @@ import { useRouter } from 'vue-router';
 
 const pages = [
     { name: "Burger", content: "La tierlist des meilleurs burger/frites de Strasbourg en livraison." },
-    { name: "Morpion", content: "Un morpion tout ce qu'il y a de plus banal, mais avec un twist et un système de points." },
     { name: "Daft", content: 'Une soundboard qui fait référence à "Harder, Better, Faster, Stronger" des Daft Punk.' },
-    { name: "Life", content: "Une implémentation très abstraite du Game of Life de John Conway." },
+    { name: "GitHub", content: "Les sources pour ce site, et pour mes autres projets." },
+    { name: "Rogue Like", content: "Comme son nom l'indique, un petit prototype de rogue lite inspiré par Crypt of the NecroDancer, développé sous Unity." },
     { name: "Pomme", content: "Ma foi c'est une image de pomme tout ce qu'il y a de plus banal." },
     { name: "Crédits", content: "La liste de tout ce qui m'a inspiré pour faire ce site, et les références des images et bouts de code utilisés." }
 ]
@@ -27,8 +27,8 @@ const router = useRouter();
             <TransitionGroup appear>
                 <NierButton :key="page.name" class="button" @click="selectedPage = page" v-for="(page, index) in pages"
                     :style="{ transitionDelay: index * 0.05 + 's' }">{{
-                        page.name
-                    }}</NierButton>
+                    page.name
+                }}</NierButton>
             </TransitionGroup>
         </NierLeftBars>
         <div v-if="selectedPage == null" style="flex:1"></div>
@@ -40,7 +40,7 @@ const router = useRouter();
                     </div>
                     <div style="display:flex;justify-content: flex-end;">
                         <NierButton
-                            @click="router.push('/' + selectedPage.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase())">
+                            @click="router.push('/' + selectedPage.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '').toLowerCase())">
                             Accéder</NierButton>
                     </div>
                 </div>
@@ -73,7 +73,7 @@ const router = useRouter();
 
 .content {
     display: flex;
-    gap: clamp(1rem, 2vw, 3rem);
+    gap: clamp(0rem, 2vw, 3rem);
     height: 100%;
     flex-wrap: wrap;
 }
