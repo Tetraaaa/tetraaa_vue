@@ -2,7 +2,7 @@
 import NierLeftBars from '../NierLeftBars.vue';
 import NierButton from '../NierButton.vue';
 import { inject } from 'vue';
-import type { IUserPreferences } from '@/App.vue';
+import type { IUserPreferences } from '@/main';
 
 const { userPreferences, toggleAutoDestructionEnabled } = inject<IUserPreferences>('userPreferences')!;
 
