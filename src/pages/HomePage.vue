@@ -32,6 +32,8 @@ main {
     font-family: "Rodin";
     color: white;
     display: flex;
+    width: 100vw;
+    height: 100vh;
     flex-direction: column;
     min-height: 100vh;
     background-color: #cbc6b2;

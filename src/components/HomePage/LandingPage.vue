@@ -21,15 +21,18 @@ const { backroundMusicPlaying, toggleBackgroundMusic, backroundVoicesPlaying, to
         <video id="video" muted autoplay loop>
             <source src="../../assets/videos/2b_chilling_forest_v3.mp4" type="video/mp4" />
         </video>
-        <h1>TETRAAA.FR<BlinkingText>_</BlinkingText>
-        </h1>
-        <div class="buttons">
-            <button @click="isAnimationShown = !isAnimationShown">Accéder au site</button>
-            <button @click="toggleBackgroundMusic">{{ backroundMusicPlaying ? 'Couper la musique' : 'Activer la musique'
-            }}</button>
-            <button @click="toggleBackgroundVoices">{{ backroundVoicesPlaying ? 'Couper le chant' : 'Activer le chant'
-            }}</button>
-        </div>
+        <Transition appear>
+            <h1>TETRAAA.FR<BlinkingText>_</BlinkingText>
+            </h1>
+        </Transition>
+        <Transition appear>
+            <div class="buttons">
+                <button @click="isAnimationShown = !isAnimationShown">Accéder au site</button>
+                <button @click="toggleBackgroundMusic">{{ backroundMusicPlaying ? 'Couper la musique' : 'Activer la musique'}}</button>
+                <button @click="toggleBackgroundVoices">{{ backroundVoicesPlaying ? 'Couper le chant' : 'Activer le chant'}}</button>
+            </div>
+        </Transition>
+
         <LandingPageAnimations v-if="isAnimationShown" @animations-finished="onAnimationsFinished" />
     </div>
 </template>
@@ -92,5 +95,15 @@ h1 {
     text-align: center;
     user-select: none;
     text-transform: uppercase;
+}
+
+.v-enter-active,
+.v-leave-active {
+    transition: opacity 0.5s linear;
+}
+
+.v-enter-from,
+.v-leave-to {
+    opacity: 0;
 }
 </style>

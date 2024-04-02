@@ -6,14 +6,121 @@ import NierLeftBars from './NierLeftBars.vue';
 import Navigation from './Navigation.vue';
 import Options from './Options.vue';
 import quitMenuSound from "@/assets/audio/menu_close.ogg"
+import backgroundVideo from "../../assets/videos/2b_chilling_forest_v3.mp4"
 
 const emit = defineEmits(['show-landing']);
 
 const currentlySelectedView = ref<'Navigation' | 'Options'>("Navigation");
 
+
+interface Coords {
+    x: number;
+    y: number;
+    inverted: boolean;
+}
+
 function onQuitClick() {
     new Audio(quitMenuSound).play();
-    emit('show-landing');
+    addVideoBehindMainElement();
+    let main = document.querySelector("main");
+    main!.style.position = "fixed";
+    animateTriangles();
+}
+
+function addVideoBehindMainElement() {
+    let video = document.createElement("video");
+    video.muted = true;
+    video.setAttribute("muted", "true");
+    video.setAttribute("autoplay", "true");
+    video.setAttribute("loop", "true");
+    video.style.clipPath = "url(#myClip)";
+    video.style.width = "100vw";
+    video.style.height = "100vh";
+    video.style.position = "fixed";
+    video.style.objectFit = "cover";
+    video.style.pointerEvents = "none";
+    video.id = "seeThroughVideo";
+
+    let source = document.createElement("source");
+    source.setAttribute("src", backgroundVideo);
+    source.setAttribute("type", "video/mp4");
+    video.appendChild(source);
+    document.getElementById("app")?.appendChild(video);
+    video.load()
+    video.play()
+}
+
+function getNode(name: string, v?: any) {
+    let element = document.createElementNS("http://www.w3.org/2000/svg", name);
+    for (var p in v)
+        element.setAttributeNS(null, p, v[p]);
+    return element;
+}
+
+function generateSVGTriangle(x: number, y: number, height: number, width: number, inverted: boolean) {
+    width = width * 2 + 2;
+    height = height + 1;
+
+    let triangle = getNode('polygon', { points: `0 ${height}, ${width} ${height}, ${height} 0`, });
+    triangle.style.transform = `translate(${x}px, ${y}px) ${inverted ? "rotate(180deg)" : ""}`;
+    triangle.style.transformBox = `fill-box`;
+    triangle.style.transformOrigin = `center`;
+    return triangle;
+}
+
+function animateTriangles() {
+    let svg = getNode("svg");
+    svg.style.position = "fixed";
+    svg.id = "svgMask";
+    let mask = getNode("clipPath");
+    mask.id = "myClip"
+    svg.appendChild(mask);
+    let container = mask;
+    document.body.appendChild(svg);
+    let availableCoords: Coords[] = [];
+
+    let TRIANGLES_PER_ROW = 16;
+    let TRIANGLES_PER_COLUMN = 8;
+    if (document.body.clientWidth < document.body.clientHeight) {
+        //L'écran est en mode portrait, on passe à 16 triangles en hauteur et 8 en largeur pour éviter qu'ils soient tout étirés
+        TRIANGLES_PER_COLUMN = 16;
+        TRIANGLES_PER_ROW = 8;
+    }
+
+    let triangleWidth = Math.ceil(document.body.clientWidth / TRIANGLES_PER_ROW);
+    let triangleHeight = Math.ceil(document.body.clientHeight / TRIANGLES_PER_COLUMN);
+
+    //On génère toutes les coordonnées possibles (la boucle commence à -1 pour qu'il n'y ait pas de trou à gauche de l'écran)
+    for (let i = -1; i < TRIANGLES_PER_ROW; i++) {
+        for (let j = 0; j < TRIANGLES_PER_COLUMN; j++) {
+            availableCoords.push({
+                x: i * triangleWidth,
+                y: j * triangleHeight,
+                inverted: i % 2 == 0 ? j % 2 == 1 : j % 2 == 0,
+            });
+        }
+    }
+
+    //Toutes les 30ms, on affiche 8 nouveaux triangles isocèles aléatoires parmi ceux qui ne sont pas encore affichés
+    let interval = setInterval(() => {
+        if (availableCoords.length == 0) {
+            clearInterval(interval);
+            emit("show-landing");
+            document.getElementById("svgMask")?.remove();
+            setTimeout(() => {
+                let seeThroughVideo: HTMLVideoElement = document.getElementById("seeThroughVideo") as HTMLVideoElement;
+                document.getElementById("video")?.replaceWith(seeThroughVideo);
+                document.getElementById("seeThroughVideo")!.id = "video";
+            }, 200);
+            return;
+        }
+        for (let i = 0; i < 8; i++) {
+            let randomIndex = Math.floor(Math.random() * availableCoords.length);
+            let picked = availableCoords[randomIndex];
+            container.appendChild(generateSVGTriangle(picked.x, picked.y, triangleHeight, triangleWidth, picked.inverted));
+            availableCoords.splice(randomIndex, 1);
+        }
+    }, 30);
 }
 
 </script>
@@ -31,7 +138,8 @@ function onQuitClick() {
                     style="transition-delay: 0.15s;">OPTIONS</NierButton>
             </Transition>
             <Transition appear>
-                <NierButton class="headerButton" style="transition-delay: 0.2s;" @click="onQuitClick">QUITTER</NierButton>
+                <NierButton class="headerButton" style="transition-delay: 0.2s;" @click="onQuitClick">QUITTER
+                </NierButton>
             </Transition>
         </NierLeftBars>
         <HomePageAnimations />

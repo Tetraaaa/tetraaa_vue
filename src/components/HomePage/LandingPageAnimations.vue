@@ -60,8 +60,6 @@ function animateTriangles() {
         if (availableCoords.length == 0) {
             clearInterval(interval);
             emit("animations-finished");
-            document.body.dispatchEvent(new CustomEvent("mainMenuAccessed", { bubbles: true }));
-            // set("hideLandingPage", true);
             return;
         }
         for (let i = 0; i < 8; i++) {
