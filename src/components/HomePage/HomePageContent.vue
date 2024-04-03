@@ -57,12 +57,16 @@ function getNode(name: string, v?: any) {
     return element;
 }
 
-function generateSVGTriangle(x: number, y: number, height: number, width: number, inverted: boolean) {
+function generateSVGTriangle(x: number, y: number, width: number, inverted: boolean) {
     width = width * 2 + 2;
-    height = height + 1;
-
-    let triangle = getNode('polygon', { points: `0 ${height}, ${width} ${height}, ${height} 0`, });
-    triangle.style.transform = `translate(${x}px, ${y}px) ${inverted ? "rotate(180deg)" : ""}`;
+    let triangle;
+    if (inverted) {
+        triangle = getNode('polygon', { points: `0 0, ${width / 2} ${width / 2}, ${width} 0` });
+    }
+    else {
+        triangle = getNode('polygon', { points: `0 ${width / 2}, ${width} ${width / 2}, ${width / 2} 0` });
+    }
+    triangle.style.transform = `translate(${x}px, ${y}px)`;
     triangle.style.transformBox = `fill-box`;
     triangle.style.transformOrigin = `center`;
     return triangle;
@@ -117,7 +121,7 @@ function animateTriangles() {
         for (let i = 0; i < 8; i++) {
             let randomIndex = Math.floor(Math.random() * availableCoords.length);
             let picked = availableCoords[randomIndex];
-            container.appendChild(generateSVGTriangle(picked.x, picked.y, triangleHeight, triangleWidth, picked.inverted));
+            container.appendChild(generateSVGTriangle(picked.x, picked.y, triangleWidth, picked.inverted));
             availableCoords.splice(randomIndex, 1);
         }
     }, 30);
