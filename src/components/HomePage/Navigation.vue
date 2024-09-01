@@ -15,6 +15,7 @@ const pages = [
         content: "Comme son nom l'indique, un petit prototype de rogue lite inspiré par Crypt of the NecroDancer, développé sous Unity.",
     },
     { name: "Pomme", content: "Ma foi c'est une image de pomme tout ce qu'il y a de plus banal." },
+    { name: "Dofus", content: "Un petit guide visuel sur l'ordre dans lequel réaliser les succès sur Dofus pour avoir une progression fluide et agréable." },
     { name: "Crédits", content: "La liste de tout ce qui m'a inspiré pour faire ce site, et les références des images et bouts de code utilisés." },
 ];
 const selectedPage = ref<{ name: string; content: string } | null>(null);
@@ -27,14 +28,8 @@ const router = useRouter();
     <div class="content">
         <NierLeftBars direction="column" spacing="1.5rem" class="options">
             <TransitionGroup appear>
-                <NierButton
-                    :key="page.name"
-                    class="button"
-                    @click="selectedPage = page"
-                    v-for="(page, index) in pages"
-                    :style="{ transitionDelay: index * 0.05 + 's' }"
-                    >{{ page.name }}</NierButton
-                >
+                <NierButton :key="page.name" class="button" @click="selectedPage = page" v-for="(page, index) in pages"
+                    :style="{ transitionDelay: index * 0.05 + 's' }">{{ page.name }}</NierButton>
             </TransitionGroup>
         </NierLeftBars>
         <div v-if="selectedPage == null" style="flex: 1"></div>
@@ -45,20 +40,17 @@ const router = useRouter();
                         {{ selectedPage.content }}
                     </div>
                     <div style="display: flex; justify-content: flex-end">
-                        <NierButton
-                            @click="
-                                router.push(
-                                    '/' +
-                                        selectedPage.name
-                                            .normalize('NFD')
-                                            .replace(/[\u0300-\u036f]/g, '')
-                                            .replace(/\s+/g, '')
-                                            .toLowerCase(),
-                                )
-                            "
-                        >
-                            Accéder</NierButton
-                        >
+                        <NierButton @click="
+                            router.push(
+                                '/' +
+                                selectedPage.name
+                                    .normalize('NFD')
+                                    .replace(/[\u0300-\u036f]/g, '')
+                                    .replace(/\s+/g, '')
+                                    .toLowerCase(),
+                            )
+                            ">
+                            Accéder</NierButton>
                     </div>
                 </div>
             </NierContainer>
