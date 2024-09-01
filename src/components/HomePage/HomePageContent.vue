@@ -1,17 +1,16 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
-import HomePageAnimations from '@/components/HomePage/HomePageAnimations.vue';
-import NierButton from './NierButton.vue';
-import NierLeftBars from './NierLeftBars.vue';
-import Navigation from './Navigation.vue';
-import Options from './Options.vue';
-import quitMenuSound from "@/assets/audio/menu_close.ogg"
-import backgroundVideo from "../../assets/videos/2b_chilling_forest_v3.mp4"
+import { onMounted, ref } from "vue";
+import HomePageAnimations from "@/components/HomePage/HomePageAnimations.vue";
+import NierButton from "./NierButton.vue";
+import NierLeftBars from "./NierLeftBars.vue";
+import Navigation from "./Navigation.vue";
+import Options from "./Options.vue";
+import quitMenuSound from "@/assets/audio/menu_close.ogg";
+import backgroundVideo from "../../assets/videos/2b_chilling_forest_v3.mp4";
 
-const emit = defineEmits(['show-landing']);
+const emit = defineEmits(["show-landing"]);
 
-const currentlySelectedView = ref<'Navigation' | 'Options'>("Navigation");
-
+const currentlySelectedView = ref<"Navigation" | "Options">("Navigation");
 
 interface Coords {
     x: number;
@@ -46,14 +45,13 @@ function addVideoBehindMainElement() {
     source.setAttribute("type", "video/mp4");
     video.appendChild(source);
     document.getElementById("app")?.appendChild(video);
-    video.load()
-    video.play()
+    video.load();
+    video.play();
 }
 
 function getNode(name: string, v?: any) {
     let element = document.createElementNS("http://www.w3.org/2000/svg", name);
-    for (var p in v)
-        element.setAttributeNS(null, p, v[p]);
+    for (var p in v) element.setAttributeNS(null, p, v[p]);
     return element;
 }
 
@@ -61,10 +59,9 @@ function generateSVGTriangle(x: number, y: number, width: number, inverted: bool
     width = width * 2 + 2;
     let triangle;
     if (inverted) {
-        triangle = getNode('polygon', { points: `0 0, ${width / 2} ${width / 2}, ${width} 0` });
-    }
-    else {
-        triangle = getNode('polygon', { points: `0 ${width / 2}, ${width} ${width / 2}, ${width / 2} 0` });
+        triangle = getNode("polygon", { points: `0 0, ${width / 2} ${width / 2}, ${width} 0` });
+    } else {
+        triangle = getNode("polygon", { points: `0 ${width / 2}, ${width} ${width / 2}, ${width / 2} 0` });
     }
     triangle.style.transform = `translate(${x}px, ${y}px)`;
     triangle.style.transformBox = `fill-box`;
@@ -77,7 +74,7 @@ function animateTriangles() {
     svg.style.position = "fixed";
     svg.id = "svgMask";
     let mask = getNode("clipPath");
-    mask.id = "myClip"
+    mask.id = "myClip";
     svg.appendChild(mask);
     let container = mask;
     document.body.appendChild(svg);
@@ -126,24 +123,19 @@ function animateTriangles() {
         }
     }, 30);
 }
-
 </script>
 
 <template>
     <div class="container">
         <NierLeftBars :spacing="`clamp(.75rem, 2vw, 2rem)`">
             <Transition appear>
-                <NierButton class="headerButton" @click="currentlySelectedView = 'Navigation'"
-                    style="transition-delay: 0.1s;">NAVIGATION
-                </NierButton>
+                <NierButton class="headerButton" @click="currentlySelectedView = 'Navigation'" style="transition-delay: 0.1s">NAVIGATION </NierButton>
             </Transition>
             <Transition appear>
-                <NierButton class="headerButton" @click="currentlySelectedView = 'Options'"
-                    style="transition-delay: 0.15s;">OPTIONS</NierButton>
+                <NierButton class="headerButton" @click="currentlySelectedView = 'Options'" style="transition-delay: 0.15s">OPTIONS</NierButton>
             </Transition>
             <Transition appear>
-                <NierButton class="headerButton" style="transition-delay: 0.2s;" @click="onQuitClick">QUITTER
-                </NierButton>
+                <NierButton class="headerButton" style="transition-delay: 0.2s" @click="onQuitClick">QUITTER </NierButton>
             </Transition>
         </NierLeftBars>
         <HomePageAnimations />
@@ -161,7 +153,7 @@ function animateTriangles() {
     text-shadow: 5px 5px #989589;
     color: #44423a;
     letter-spacing: 7px;
-    font-family: 'Rodin';
+    font-family: "Rodin";
 }
 
 .headerButton {

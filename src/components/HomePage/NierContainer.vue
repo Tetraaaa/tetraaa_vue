@@ -13,8 +13,8 @@ const { title } = defineProps<{ title?: string }>();
 
 <style scoped lang="scss">
 * {
-    font-family: 'Rodin-Medium';
-    font-size: clamp(.9rem, 2vw, 1.2rem);
+    font-family: "Rodin-Medium";
+    font-size: clamp(0.9rem, 2vw, 1.2rem);
     letter-spacing: 2px;
 }
 
@@ -33,7 +33,7 @@ const { title } = defineProps<{ title?: string }>();
 }
 
 .content {
-    padding: .5rem 1rem;
+    padding: 0.5rem 1rem;
     display: flex;
     height: 100%;
 }

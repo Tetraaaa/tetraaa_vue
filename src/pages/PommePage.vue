@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import BackButton from '@/components/BackButton.vue';
-
-
+import BackButton from "@/components/BackButton.vue";
 </script>
 
 <template>
@@ -10,7 +8,6 @@ import BackButton from '@/components/BackButton.vue';
         <img class="pomme" src="@/assets/images/poire.png" alt="Pomme ?" />
     </div>
 </template>
-
 
 <style scoped lang="scss">
 .container {

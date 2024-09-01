@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, onUnmounted } from 'vue';
-import menuOpenSound from '../../assets/audio/menu_open.ogg';
+import { onBeforeUnmount, onMounted, onUnmounted } from "vue";
+import menuOpenSound from "../../assets/audio/menu_open.ogg";
 
-const emit = defineEmits(['animations-finished'])
+const emit = defineEmits(["animations-finished"]);
 
 interface Coords {
     x: number;
@@ -17,16 +17,16 @@ onMounted(() => {
         animateLines();
         setTimeout(animateTriangles, 400);
     }, 1);
-})
+});
 
 onBeforeUnmount(() => {
     document.getElementById("video")!.style.filter = "none";
-    document.querySelectorAll<HTMLDivElement>(".home-line").forEach((e: HTMLDivElement) => e.style.width = "0%");
+    document.querySelectorAll<HTMLDivElement>(".home-line").forEach((e: HTMLDivElement) => (e.style.width = "0%"));
     document.querySelectorAll<HTMLDivElement>(".triangle").forEach((e: HTMLElement) => e.remove());
-})
+});
 
 function animateLines() {
-    document.querySelectorAll<HTMLDivElement>(".home-line").forEach((e: HTMLDivElement) => e.style.width = "100%");
+    document.querySelectorAll<HTMLDivElement>(".home-line").forEach((e: HTMLDivElement) => (e.style.width = "100%"));
 }
 
 function animateTriangles() {
@@ -86,8 +86,6 @@ function generateTriangle(x: number, y: number, height: number, width: number, i
 
     return triangle;
 }
-
-
 </script>
 
 <template>

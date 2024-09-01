@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from "vue";
 import after from "@/assets/audio/daft/after.mp3";
 import after1 from "@/assets/audio/daft/after1.mp3";
 import after2 from "@/assets/audio/daft/after2.mp3";
@@ -49,16 +49,14 @@ import workit from "@/assets/audio/daft/workit.mp3";
 import workit1 from "@/assets/audio/daft/workit1.mp3";
 import workit2 from "@/assets/audio/daft/workit2.mp3";
 import jamMusic from "@/assets/audio/daft/jam.mp3";
-import BackButton from '@/components/BackButton.vue';
-
-
+import BackButton from "@/components/BackButton.vue";
 
 const backgroundGradients = [
     ["#000000", "#14182b"],
     ["#000000", "#391e83"],
     ["#000000", "#2930a3"],
-    ["#000000", "#000000"]
-]
+    ["#000000", "#000000"],
+];
 const currentMood = ref<0 | 1 | 2 | 3>(0);
 const waitingReset = ref(false);
 const indexesPressed = ref<number[]>([]);
@@ -78,12 +76,44 @@ function playSample(sampleIndex: number) {
     let samples: string[] = [];
     if (currentMood.value === 0) {
         samples = [workit, harder, makeit, better, doit, faster, makesus, stronger, morethan, ever, hour, after, our, workis, never, over];
-    }
-    else if (currentMood.value === 1) {
-        samples = [workit1, harder1, makeit1, better1, doit1, faster1, makesus1, stronger1, morethan1, ever1, hour1, after1, our1, workis1, never1, over1];
-    }
-    else {
-        samples = [workit2, harder2, makeit2, better2, doit2, faster2, makesus2, stronger2, morethan2, ever2, hour2, after2, our2, workis2, never2, over2];
+    } else if (currentMood.value === 1) {
+        samples = [
+            workit1,
+            harder1,
+            makeit1,
+            better1,
+            doit1,
+            faster1,
+            makesus1,
+            stronger1,
+            morethan1,
+            ever1,
+            hour1,
+            after1,
+            our1,
+            workis1,
+            never1,
+            over1,
+        ];
+    } else {
+        samples = [
+            workit2,
+            harder2,
+            makeit2,
+            better2,
+            doit2,
+            faster2,
+            makesus2,
+            stronger2,
+            morethan2,
+            ever2,
+            hour2,
+            after2,
+            our2,
+            workis2,
+            never2,
+            over2,
+        ];
     }
 
     let a = new Audio(samples[sampleIndex]);
@@ -139,30 +169,36 @@ function jam() {
         a.play();
     }, 450);
 }
-
 </script>
 
 <template>
     <BackButton />
-    <div class="container" :style="{
-        background: `radial-gradient(ellipse at bottom, ${backgroundGradients[currentMood][0]} 0%, ${backgroundGradients[currentMood][1]} 100%)`,
-        pointerEvents: currentMood === 3 && !waitingReset ? 'none' : 'all'
-    }">
+    <div
+        class="container"
+        :style="{
+            background: `radial-gradient(ellipse at bottom, ${backgroundGradients[currentMood][0]} 0%, ${backgroundGradients[currentMood][1]} 100%)`,
+            pointerEvents: currentMood === 3 && !waitingReset ? 'none' : 'all',
+        }"
+    >
         <div v-if="!waitingReset" class="dedans">
-            <div class="cell" :class="{ jamming: jamming.includes(inx) }" v-for="(cell, inx) in Array(16).fill(0)"
-                @mousedown="playSample(inx)" :style="{ backgroundColor: `hsl(${rnd(360)} 100% 40%)` }">
-            </div>
+            <div
+                class="cell"
+                :class="{ jamming: jamming.includes(inx) }"
+                v-for="(cell, inx) in Array(16).fill(0)"
+                @mousedown="playSample(inx)"
+                :style="{ backgroundColor: `hsl(${rnd(360)} 100% 40%)` }"
+            ></div>
         </div>
-        <div v-else class="dedans" style="place-items: center;grid-template-columns: 1fr 1fr;">
-            <div class="cell" v-for="(cell, inx) in Array(2).fill(0)" @mousedown="playSample(inx + 14)"
-                :style="{ backgroundColor: `hsl(${rnd(360)} 100% 40%)` }">
-            </div>
+        <div v-else class="dedans" style="place-items: center; grid-template-columns: 1fr 1fr">
+            <div
+                class="cell"
+                v-for="(cell, inx) in Array(2).fill(0)"
+                @mousedown="playSample(inx + 14)"
+                :style="{ backgroundColor: `hsl(${rnd(360)} 100% 40%)` }"
+            ></div>
         </div>
     </div>
 </template>
-
-
-
 
 <style scoped lang="scss">
 .container {
@@ -181,13 +217,13 @@ function jam() {
     aspect-ratio: 1;
 }
 
-@media (min-width:450px) {
+@media (min-width: 450px) {
     .dedans {
         height: 100%;
     }
 }
 
-@media (max-width:450px) {
+@media (max-width: 450px) {
     .dedans {
         width: 100%;
     }
@@ -203,7 +239,7 @@ function jam() {
     min-height: 4rem;
     min-width: 4rem;
     box-shadow: inset 0 0 clamp(8px, 4vw, 32px) clamp(8px, 4vw, 30px) rgba(0, 0, 0, 0.39);
-    transition: filter .35s;
+    transition: filter 0.35s;
 
     &.jamming {
         filter: brightness(1.5);
@@ -214,7 +250,7 @@ function jam() {
         cursor: initial;
 
         &:hover {
-            filter: none
+            filter: none;
         }
     }
 

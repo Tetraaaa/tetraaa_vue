@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import BackButton from '@/components/BackButton.vue';
-import { onMounted } from 'vue';
+import BackButton from "@/components/BackButton.vue";
+import { onMounted } from "vue";
 
 onMounted(() => {
     const canvasElement = document.getElementById("canvas") as HTMLCanvasElement;
@@ -10,18 +10,14 @@ onMounted(() => {
     canvasContext.fillStyle = "black";
     canvasContext.fillRect(0, 0, canvasElement.width, canvasElement.height);
 });
-
 </script>
 
 <template>
     <div class="container">
         <BackButton />
-        <canvas id="canvas">
-
-        </canvas>
+        <canvas id="canvas"> </canvas>
     </div>
 </template>
-
 
 <style scoped lang="scss">
 .container {

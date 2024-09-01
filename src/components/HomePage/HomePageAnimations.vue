@@ -1,13 +1,10 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted } from 'vue';
-
-
+import { onBeforeUnmount, onMounted } from "vue";
 
 onMounted(() => {
     setTimeout(() => {
         animateLines();
         animateCircles();
-
     }, 1);
 });
 
@@ -26,7 +23,7 @@ onBeforeUnmount(() => {
     document.querySelectorAll<HTMLDivElement>(".line-3").forEach((el: HTMLElement) => {
         el.style.width = "0";
     });
-})
+});
 
 function animateLines() {
     document.querySelectorAll<HTMLDivElement>(".pattern").forEach((el: HTMLElement) => {
@@ -58,52 +55,115 @@ function animateCircles() {
 </script>
 
 <template>
-    <div style="overflow: hidden;">
-
-        <div class="pattern" style="top: 10vh;left:0">
+    <div style="overflow: hidden">
+        <div class="pattern" style="top: 10vh; left: 0">
             <div class="container">
                 <div class="pattern-inner"></div>
             </div>
         </div>
-        <div class="pattern" style="bottom: 0;right:0">
+        <div class="pattern" style="bottom: 0; right: 0">
             <div class="container">
                 <div class="pattern-inner"></div>
             </div>
         </div>
-        <svg class="circle" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-            x="0px" y="0px" viewBox="0 0 100 100" xml:space="preserve" style="top:-25vw;left:-25vw">
-            <circle fill="none" stroke="#4d493e1a" stroke-width=".25" cx="50" cy="50" r="48" stroke-dasharray="360"
-                stroke-linecap="round" transform="rotate(-90 ) translate(-100 0)">
-                <animate id="circle-animation" attributeName="stroke-dashoffset" values="360;0" dur="1.5s"
-                    begin="indefinite">
-                </animate>
+        <svg
+            class="circle"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            x="0px"
+            y="0px"
+            viewBox="0 0 100 100"
+            xml:space="preserve"
+            style="top: -25vw; left: -25vw"
+        >
+            <circle
+                fill="none"
+                stroke="#4d493e1a"
+                stroke-width=".25"
+                cx="50"
+                cy="50"
+                r="48"
+                stroke-dasharray="360"
+                stroke-linecap="round"
+                transform="rotate(-90 ) translate(-100 0)"
+            >
+                <animate id="circle-animation" attributeName="stroke-dashoffset" values="360;0" dur="1.5s" begin="indefinite"></animate>
             </circle>
         </svg>
-        <svg class="circle" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-            x="0px" y="0px" viewBox="0 0 100 100" xml:space="preserve" style="bottom:-25vw;right:-25vw">
-            <circle fill="none" stroke="#4d493e1a" stroke-width=".25" cx="50" cy="50" r="48" stroke-dasharray="360"
-                stroke-linecap="round" transform="rotate(-90 ) translate(-100 0)">
-                <animate id="circle-animation" attributeName="stroke-dashoffset" values="360;0" dur="1.5s"
-                    begin="indefinite">
-                </animate>
+        <svg
+            class="circle"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            x="0px"
+            y="0px"
+            viewBox="0 0 100 100"
+            xml:space="preserve"
+            style="bottom: -25vw; right: -25vw"
+        >
+            <circle
+                fill="none"
+                stroke="#4d493e1a"
+                stroke-width=".25"
+                cx="50"
+                cy="50"
+                r="48"
+                stroke-dasharray="360"
+                stroke-linecap="round"
+                transform="rotate(-90 ) translate(-100 0)"
+            >
+                <animate id="circle-animation" attributeName="stroke-dashoffset" values="360;0" dur="1.5s" begin="indefinite"></animate>
             </circle>
         </svg>
-        <svg class="circle-delayed" version="1.1" xmlns="http://www.w3.org/2000/svg"
-            xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" xml:space="preserve"
-            style="top:-25vw;left:-25vw">
-            <circle fill="none" stroke="#4d493e1a" stroke-width=".25" cx="50" cy="50" r="46" stroke-dasharray="360"
-                stroke-linecap="round" transform="rotate(-90 ) translate(-100 0)">
-                <animate id="circle-animation-delayed" attributeName="stroke-dashoffset" values="360;0" dur="1.5s"
-                    begin="indefinite"></animate>
+        <svg
+            class="circle-delayed"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            x="0px"
+            y="0px"
+            viewBox="0 0 100 100"
+            xml:space="preserve"
+            style="top: -25vw; left: -25vw"
+        >
+            <circle
+                fill="none"
+                stroke="#4d493e1a"
+                stroke-width=".25"
+                cx="50"
+                cy="50"
+                r="46"
+                stroke-dasharray="360"
+                stroke-linecap="round"
+                transform="rotate(-90 ) translate(-100 0)"
+            >
+                <animate id="circle-animation-delayed" attributeName="stroke-dashoffset" values="360;0" dur="1.5s" begin="indefinite"></animate>
             </circle>
         </svg>
-        <svg class="circle-delayed" version="1.1" xmlns="http://www.w3.org/2000/svg"
-            xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" xml:space="preserve"
-            style="bottom:-25vw;right:-25vw">
-            <circle fill="none" stroke="#4d493e1a" stroke-width=".25" cx="50" cy="50" r="46" stroke-dasharray="360"
-                stroke-linecap="round" transform="rotate(-90 ) translate(-100 0)">
-                <animate id="circle-animation-delayed" attributeName="stroke-dashoffset" values="360;0" dur="1.5s"
-                    begin="indefinite"></animate>
+        <svg
+            class="circle-delayed"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            x="0px"
+            y="0px"
+            viewBox="0 0 100 100"
+            xml:space="preserve"
+            style="bottom: -25vw; right: -25vw"
+        >
+            <circle
+                fill="none"
+                stroke="#4d493e1a"
+                stroke-width=".25"
+                cx="50"
+                cy="50"
+                r="46"
+                stroke-dasharray="360"
+                stroke-linecap="round"
+                transform="rotate(-90 ) translate(-100 0)"
+            >
+                <animate id="circle-animation-delayed" attributeName="stroke-dashoffset" values="360;0" dur="1.5s" begin="indefinite"></animate>
             </circle>
         </svg>
         <div class="line top-left-1"></div>
@@ -135,10 +195,29 @@ svg {
 
 .pattern-inner {
     height: 40px;
-    background-size: 50px 3px, 50px 1px, 50px 1px, 50px 1px, 50px 1px, 50px 1px, 50px 1px, 50px 1px, 50px 1px;
-    background-position: 0 0, 22px 4px, 22px 5px, 22px 6px, 22px 7px, 28px 12px, 28px 13px, 28px 14px, 28px 15px;
+    background-size:
+        50px 3px,
+        50px 1px,
+        50px 1px,
+        50px 1px,
+        50px 1px,
+        50px 1px,
+        50px 1px,
+        50px 1px,
+        50px 1px;
+    background-position:
+        0 0,
+        22px 4px,
+        22px 5px,
+        22px 6px,
+        22px 7px,
+        28px 12px,
+        28px 13px,
+        28px 14px,
+        28px 15px;
     background-image: linear-gradient(90deg, #4d493e, #4d493e 10px, transparent 10px),
-        linear-gradient(90deg,
+        linear-gradient(
+            90deg,
             rgba(#4d493e, 0.4),
             rgba(#4d493e, 0.4) 1px,
             rgba(#4d493e, 0.8) 1px,
@@ -157,8 +236,10 @@ svg {
             rgba(#4d493e, 0.9) 15px,
             rgba(#4d493e, 0.4) 15px,
             rgba(#4d493e, 0.4) 16px,
-            transparent 16px),
-        linear-gradient(90deg,
+            transparent 16px
+        ),
+        linear-gradient(
+            90deg,
             rgba(#4d493e, 0.9),
             rgba(#4d493e, 0.9) 1px,
             rgba(#4d493e, 1) 1px,
@@ -177,8 +258,10 @@ svg {
             rgba(#4d493e, 1) 15px,
             rgba(#4d493e, 0.9) 15px,
             rgba(#4d493e, 0.9) 16px,
-            transparent 16px),
-        linear-gradient(90deg,
+            transparent 16px
+        ),
+        linear-gradient(
+            90deg,
             rgba(#4d493e, 0.9),
             rgba(#4d493e, 0.9) 1px,
             rgba(#4d493e, 1) 1px,
@@ -197,8 +280,10 @@ svg {
             rgba(#4d493e, 1) 15px,
             rgba(#4d493e, 0.9) 15px,
             rgba(#4d493e, 0.9) 16px,
-            transparent 16px),
-        linear-gradient(90deg,
+            transparent 16px
+        ),
+        linear-gradient(
+            90deg,
             rgba(#4d493e, 0.4),
             rgba(#4d493e, 0.4) 1px,
             rgba(#4d493e, 0.8) 1px,
@@ -217,8 +302,10 @@ svg {
             rgba(#4d493e, 0.9) 15px,
             rgba(#4d493e, 0.4) 15px,
             rgba(#4d493e, 0.4) 16px,
-            transparent 16px),
-        linear-gradient(90deg,
+            transparent 16px
+        ),
+        linear-gradient(
+            90deg,
             rgba(#4d493e, 0.4),
             rgba(#4d493e, 0.4) 1px,
             rgba(#4d493e, 0.8) 1px,
@@ -227,8 +314,10 @@ svg {
             rgba(#4d493e, 0.9) 3px,
             rgba(#4d493e, 0.4) 3px,
             rgba(#4d493e, 0.4) 4px,
-            transparent 4px),
-        linear-gradient(90deg,
+            transparent 4px
+        ),
+        linear-gradient(
+            90deg,
             rgba(#4d493e, 0.9),
             rgba(#4d493e, 0.9) 1px,
             rgba(#4d493e, 1) 1px,
@@ -237,8 +326,10 @@ svg {
             rgba(#4d493e, 1) 3px,
             rgba(#4d493e, 0.9) 3px,
             rgba(#4d493e, 0.9) 4px,
-            transparent 4px),
-        linear-gradient(90deg,
+            transparent 4px
+        ),
+        linear-gradient(
+            90deg,
             rgba(#4d493e, 0.9),
             rgba(#4d493e, 0.9) 1px,
             rgba(#4d493e, 1) 1px,
@@ -247,8 +338,10 @@ svg {
             rgba(#4d493e, 1) 3px,
             rgba(#4d493e, 0.9) 3px,
             rgba(#4d493e, 0.9) 4px,
-            transparent 4px),
-        linear-gradient(90deg,
+            transparent 4px
+        ),
+        linear-gradient(
+            90deg,
             rgba(#4d493e, 0.4),
             rgba(#4d493e, 0.4) 1px,
             rgba(#4d493e, 0.8) 1px,
@@ -257,7 +350,8 @@ svg {
             rgba(#4d493e, 0.9) 3px,
             rgba(#4d493e, 0.4) 3px,
             rgba(#4d493e, 0.4) 4px,
-            transparent 4px);
+            transparent 4px
+        );
     background-repeat: repeat-x;
 }
 
@@ -311,4 +405,5 @@ svg {
         transform: rotate(45deg);
         transform-origin: right;
     }
-}</style>
+}
+</style>

@@ -2,12 +2,12 @@
 const { direction, spacing } = defineProps({
     direction: {
         type: String,
-        default: "row"
+        default: "row",
     },
     spacing: {
         type: String,
-        default: "2.5rem"
-    }
+        default: "2.5rem",
+    },
 });
 </script>
 
@@ -39,13 +39,15 @@ const { direction, spacing } = defineProps({
     justify-content: space-evenly;
     display: flex;
     background-repeat: no-repeat;
-    background-image: linear-gradient(90deg,
-            rgba(77, 73, 62, 0.2),
-            rgba(77, 73, 62, 0.2) 14px,
-            transparent 14px,
-            transparent 20px,
-            rgba(77, 73, 62, 0.2) 20px,
-            rgba(77, 73, 62, 0.2) 23px,
-            transparent 23px);
+    background-image: linear-gradient(
+        90deg,
+        rgba(77, 73, 62, 0.2),
+        rgba(77, 73, 62, 0.2) 14px,
+        transparent 14px,
+        transparent 20px,
+        rgba(77, 73, 62, 0.2) 20px,
+        rgba(77, 73, 62, 0.2) 23px,
+        transparent 23px
+    );
 }
 </style>

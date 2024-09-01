@@ -1,74 +1,75 @@
-import './assets/main.css'
+import "./assets/main.css";
 
-import { createApp, ref, type Ref } from 'vue'
-import HomePage from './pages/HomePage.vue';
-import { createRouter, createWebHashHistory } from 'vue-router';
+import { createApp, ref, type Ref } from "vue";
+import HomePage from "./pages/HomePage.vue";
+import { createRouter, createWebHashHistory } from "vue-router";
 
 const routes = [
     {
-        path: '/',
+        path: "/",
         component: HomePage,
     },
     {
-        path: '/burger',
-        component: () => import('./pages/BurgerPage.vue'),
+        path: "/burger",
+        component: () => import("./pages/BurgerPage.vue"),
     },
     {
-        path: '/daft',
-        component: () => import('./pages/DaftPage.vue'),
+        path: "/daft",
+        component: () => import("./pages/DaftPage.vue"),
     },
     {
-        path:'/github',
+        path: "/github",
         component: () => null,
-        beforeEnter:() => {
-            window.location.href = "https://github.com/Tetraaaa"
+        beforeEnter: () => {
+            window.location.href = "https://github.com/Tetraaaa";
             return false;
-        }
+        },
     },
     {
-        path:'/roguelike',
+        path: "/roguelike",
         component: () => null,
-        beforeEnter:() => {
-            window.location.href = "https://tetraaa.itch.io/prototype-rogue-like"
+        beforeEnter: () => {
+            window.location.href = "https://tetraaa.itch.io/prototype-rogue-like";
             return false;
-        }
+        },
     },
     {
-        path:'/life',
-        component: () => import('./pages/LifePage.vue'),
+        path: "/life",
+        component: () => import("./pages/LifePage.vue"),
     },
     {
-        path:'/credits',
-        component: () => import('./pages/CreditsPage.vue'),
+        path: "/credits",
+        component: () => import("./pages/CreditsPage.vue"),
     },
     {
-        path:'/pomme',
-        component: () => import('./pages/PommePage.vue'),
+        path: "/pomme",
+        component: () => import("./pages/PommePage.vue"),
     },
     {
-        path: '/404',
-        component: () => import('./pages/404.vue'),
+        path: "/dofus",
+        component: () => import("./pages/DofusPage.vue"),
     },
     {
-        path:'/:pathMatch(.*)*',
-        redirect:'/404'
-    }
+        path: "/404",
+        component: () => import("./pages/404.vue"),
+    },
+    {
+        path: "/:pathMatch(.*)*",
+        redirect: "/404",
+    },
 ];
 
 const router = createRouter({
     history: createWebHashHistory(),
-    routes
-})
+    routes,
+});
 
-import { Howler } from 'howler';
-
-
+import { Howler } from "howler";
 
 //Musiques et voix de fond --------------------------
-import nierBackgroundMusic from './assets/audio/music.ogg';
-import nierBackgroundVoices from './assets/audio/vocals.ogg';
-import App from './App.vue';
-
+import nierBackgroundMusic from "./assets/audio/music.ogg";
+import nierBackgroundVoices from "./assets/audio/vocals.ogg";
+import App from "./App.vue";
 
 const DEFAULT_VOLUME = 0.3; //Volume maximal de la musique et des voix
 const TRANSITION_TIME_IN_MILISECONDS = 800; //Réduire pour accélérer la vitesse des transitions musicales, augmenter pour les ralentir
@@ -123,12 +124,12 @@ export interface IUserPreferences {
         autoDestructionEnabled: boolean;
     }>;
     toggleSkipLandingPage: () => void;
-    toggleAutoDestructionEnabled: () => void
+    toggleAutoDestructionEnabled: () => void;
 }
 
 const userPreferences = ref({
     skipLandingPage: false,
-    autoDestructionEnabled: false
+    autoDestructionEnabled: false,
 });
 
 loadUserPreferencesFromLocalStorage();
@@ -144,14 +145,14 @@ function toggleAutoDestructionEnabled() {
 }
 
 function loadUserPreferencesFromLocalStorage() {
-    const userPreferencesFromLocalStorage = localStorage.getItem('userPreferences');
+    const userPreferencesFromLocalStorage = localStorage.getItem("userPreferences");
     if (userPreferencesFromLocalStorage) {
         userPreferences.value = JSON.parse(userPreferencesFromLocalStorage);
     }
 }
 
 function saveUserPreferencesInLocalStorage() {
-    localStorage.setItem('userPreferences', JSON.stringify(userPreferences.value));
+    localStorage.setItem("userPreferences", JSON.stringify(userPreferences.value));
 }
 
 // ---------------------------------------------------
@@ -162,11 +163,18 @@ const landingPageAlreadyShownThisSession = ref(false);
 
 // ---------------------------------------------------
 
-
 createApp(App)
     .use(router)
-    .provide('userPreferences', { userPreferences, toggleSkipLandingPage, toggleAutoDestructionEnabled })
-    .provide('backgroundMusic', { backroundMusicPlaying: backroundMusicPlaying, toggleBackgroundMusic, backroundVoicesPlaying: backroundVoicesPlaying, toggleBackgroundVoices })
-    .provide('sessionInfos', { landingPageAlreadyShownThisSession, toggleLandingPageAlreadyShownThisSession: () => landingPageAlreadyShownThisSession.value = true })
+    .provide("userPreferences", { userPreferences, toggleSkipLandingPage, toggleAutoDestructionEnabled })
+    .provide("backgroundMusic", {
+        backroundMusicPlaying: backroundMusicPlaying,
+        toggleBackgroundMusic,
+        backroundVoicesPlaying: backroundVoicesPlaying,
+        toggleBackgroundVoices,
+    })
+    .provide("sessionInfos", {
+        landingPageAlreadyShownThisSession,
+        toggleLandingPageAlreadyShownThisSession: () => (landingPageAlreadyShownThisSession.value = true),
+    })
 
-    .mount('#app')
+    .mount("#app");

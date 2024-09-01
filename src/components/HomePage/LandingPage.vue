@@ -1,19 +1,18 @@
 <script setup lang="ts">
-import BlinkingText from '@/components/BlinkingText.vue';
-import LandingPageAnimations from '@/components/HomePage/LandingPageAnimations.vue';
-import { inject, ref } from 'vue';
+import BlinkingText from "@/components/BlinkingText.vue";
+import LandingPageAnimations from "@/components/HomePage/LandingPageAnimations.vue";
+import { inject, ref } from "vue";
 
 const isAnimationShown = ref(false);
 
-const emit = defineEmits(['show-content'])
-
+const emit = defineEmits(["show-content"]);
 
 function onAnimationsFinished() {
-    emit('show-content');
+    emit("show-content");
     isAnimationShown.value = false;
 }
 
-const { backroundMusicPlaying, toggleBackgroundMusic, backroundVoicesPlaying, toggleBackgroundVoices } = inject<any>('backgroundMusic');
+const { backroundMusicPlaying, toggleBackgroundMusic, backroundVoicesPlaying, toggleBackgroundVoices } = inject<any>("backgroundMusic");
 </script>
 
 <template>
@@ -22,14 +21,13 @@ const { backroundMusicPlaying, toggleBackgroundMusic, backroundVoicesPlaying, to
             <source src="../../assets/videos/2b_chilling_forest_v3.mp4" type="video/mp4" />
         </video>
         <Transition appear>
-            <h1>TETRAAA.FR<BlinkingText>_</BlinkingText>
-            </h1>
+            <h1>TETRAAA.FR<BlinkingText>_</BlinkingText></h1>
         </Transition>
         <Transition appear>
             <div class="buttons">
                 <button @click="isAnimationShown = !isAnimationShown">Accéder au site</button>
-                <button @click="toggleBackgroundMusic">{{ backroundMusicPlaying ? 'Couper la musique' : 'Activer la musique'}}</button>
-                <button @click="toggleBackgroundVoices">{{ backroundVoicesPlaying ? 'Couper le chant' : 'Activer le chant'}}</button>
+                <button @click="toggleBackgroundMusic">{{ backroundMusicPlaying ? "Couper la musique" : "Activer la musique" }}</button>
+                <button @click="toggleBackgroundVoices">{{ backroundVoicesPlaying ? "Couper le chant" : "Activer le chant" }}</button>
             </div>
         </Transition>
 
@@ -39,7 +37,7 @@ const { backroundMusicPlaying, toggleBackgroundMusic, backroundVoicesPlaying, to
 
 <style scoped>
 * {
-    font-family: 'Rodin';
+    font-family: "Rodin";
     color: white;
 }
 
@@ -54,7 +52,7 @@ const { backroundMusicPlaying, toggleBackgroundMusic, backroundVoicesPlaying, to
 .buttons {
     display: flex;
     margin-top: 1.5rem;
-    gap: .75rem;
+    gap: 0.75rem;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
@@ -76,13 +74,12 @@ button {
     background: transparent;
     border: none;
     border-radius: 4px;
-    padding: .75rem;
+    padding: 0.75rem;
     transition: opacity 0.25s;
     color: inherit;
     font-family: inherit;
     text-transform: uppercase;
 }
-
 
 h1 {
     position: relative;

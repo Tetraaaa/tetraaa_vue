@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { Transition, ref, watch } from 'vue';
-import NierButton from '../NierButton.vue';
-import NierLeftBars from '../NierLeftBars.vue';
+import { Transition, ref, watch } from "vue";
+import NierButton from "../NierButton.vue";
+import NierLeftBars from "../NierLeftBars.vue";
 
 function toggleFullScreen() {
     if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().then(() => isFullScreen.value = true);
+        document.documentElement.requestFullscreen().then(() => (isFullScreen.value = true));
     } else {
         if (document.exitFullscreen) {
-            document.exitFullscreen().then(() => isFullScreen.value = false);
+            document.exitFullscreen().then(() => (isFullScreen.value = false));
         }
     }
 }
@@ -26,8 +26,7 @@ const isFullScreen = ref(document.fullscreenElement !== null);
             <NierButton @click="invertColors">Inverser les couleurs</NierButton>
         </Transition>
         <Transition appear>
-            <NierButton @click="toggleFullScreen">{{ isFullScreen ? 'Quitter le plein écran' : 'Passer en plein écran' }}
-            </NierButton>
+            <NierButton @click="toggleFullScreen">{{ isFullScreen ? "Quitter le plein écran" : "Passer en plein écran" }} </NierButton>
         </Transition>
     </NierLeftBars>
 </template>
@@ -35,7 +34,9 @@ const isFullScreen = ref(document.fullscreenElement !== null);
 <style scoped lang="scss">
 .v-enter-active,
 .v-leave-active {
-    transition: opacity 0.3s linear, transform 0.3s ease-out;
+    transition:
+        opacity 0.3s linear,
+        transform 0.3s ease-out;
 }
 
 .v-enter-from,

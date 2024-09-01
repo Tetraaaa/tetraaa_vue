@@ -1,12 +1,12 @@
 <script setup lang="ts">
-const emit = defineEmits(['click'])
+const emit = defineEmits(["click"]);
 
-import nierButtonSound from '@/assets/audio/menu_move.ogg';
+import nierButtonSound from "@/assets/audio/menu_move.ogg";
 
 function onClick() {
     const audio = new Audio(nierButtonSound);
     audio.play();
-    emit('click');
+    emit("click");
 }
 </script>
 <template>
@@ -34,7 +34,11 @@ button {
     line-height: 1;
     cursor: pointer;
     text-align: left;
-    transition: background 0.4s ease-in-out, border-color 0.3s ease-in-out, color 0.3s ease-in-out, box-shadow 0.4s ease-in-out;
+    transition:
+        background 0.4s ease-in-out,
+        border-color 0.3s ease-in-out,
+        color 0.3s ease-in-out,
+        box-shadow 0.4s ease-in-out;
 
     &:before {
         content: "";

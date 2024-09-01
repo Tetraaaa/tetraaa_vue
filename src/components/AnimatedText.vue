@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onBeforeUpdate, onMounted, onUpdated, ref, watch } from 'vue';
-
+import { onBeforeUnmount, onBeforeUpdate, onMounted, onUpdated, ref, watch } from "vue";
 
 const { text } = defineProps<{ text: string }>();
 
@@ -33,7 +32,6 @@ onMounted(() => {
 
         let tries = getRandomInt(2, 5);
         letterSwitchInterval.value = setInterval(() => {
-
             if (tries <= 0) {
                 clearInterval(letterSwitchInterval.value!);
                 return;
@@ -47,18 +45,17 @@ onMounted(() => {
         textToShow = textToShow.slice(0, currentLetterIndex) + letter;
         currentLetterIndex++;
     }, 75);
-})
+});
 
 onBeforeUnmount(() => {
     clearInterval(letterInterval.value!);
     clearInterval(letterSwitchInterval.value!);
-})
-
+});
 </script>
 
 <template>
     <div ref="div">
-        <div style="visibility: hidden;">{{ text }}</div>
+        <div style="visibility: hidden">{{ text }}</div>
     </div>
 </template>
 

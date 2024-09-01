@@ -26,11 +26,10 @@ import BackButton from "@/components/BackButton.vue";
     </div>
 </template>
 
-
 <style scoped lang="scss">
 @font-face {
-    font-family: 'Rubik';
-    src: url("@/assets/fonts/Rubik_Light.ttf") format('truetype');
+    font-family: "Rubik";
+    src: url("@/assets/fonts/Rubik_Light.ttf") format("truetype");
     font-weight: 400;
     font-style: normal;
 }
@@ -60,7 +59,7 @@ import BackButton from "@/components/BackButton.vue";
 }
 
 .burger:nth-child(2n) {
-    background: #EEF0F2;
+    background: #eef0f2;
 }
 
 .thead {
@@ -88,13 +87,12 @@ import BackButton from "@/components/BackButton.vue";
     background: white;
     color: #000;
     border-radius: 64px;
-    padding: .5rem;
+    padding: 0.5rem;
     box-shadow: 0 3px 4px #35353580;
     margin-bottom: 1rem;
 }
 
 @media (max-width: 1175px) {
-
     h2,
     h3,
     h4 {
@@ -103,7 +101,6 @@ import BackButton from "@/components/BackButton.vue";
 }
 
 @media (max-width: 1400px) {
-
     h3,
     h4 {
         display: none;

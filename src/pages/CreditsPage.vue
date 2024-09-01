@@ -16,13 +16,19 @@ onMounted(() => {
     <BackButton />
     <div class="container">
         <audio autoplay ref="audioPlayer" loop :src="creditsSound"></audio>
-        <div class="creditBlock" v-for="credit in credits"
-            :style="{ textAlign: credit.priority >= 3 ? 'center' : 'initial', fontSize: `${credit.priority * 0.5}rem`, margin: `clamp(.25rem, ${(credit.priority - 2) * 1.75}vh ,2rem) 0` }">
+        <div
+            class="creditBlock"
+            v-for="credit in credits"
+            :style="{
+                textAlign: credit.priority >= 3 ? 'center' : 'initial',
+                fontSize: `${credit.priority * 0.5}rem`,
+                margin: `clamp(.25rem, ${(credit.priority - 2) * 1.75}vh ,2rem) 0`,
+            }"
+        >
             <a :href="credit.link">{{ credit.name }}</a>
         </div>
     </div>
 </template>
-
 
 <style scoped lang="scss">
 .container {
