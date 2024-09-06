@@ -4,8 +4,6 @@ import { onBeforeUnmount, onBeforeUpdate, onMounted, onUpdated, ref, watch } fro
 const { text } = defineProps<{ text: string }>();
 
 const div = ref<HTMLDivElement | null>(null);
-const letterInterval = ref<number | null>(null);
-const letterSwitchInterval = ref<number | null>(null);
 
 function getRandomInt(min: number, max: number) {
     min = Math.ceil(min);
@@ -17,39 +15,35 @@ function getRandomLetter(word: string) {
     return word.charAt(getRandomInt(0, word.length));
 }
 
-onMounted(() => {
-    let textToShow = "";
-    let currentLetterIndex = 0;
-    letterInterval.value = setInterval(() => {
-        if (currentLetterIndex >= text!.length - 1) {
-            clearInterval(letterInterval.value!);
-            setTimeout(() => {
-                div.value!.innerText = text!;
-            }, 25);
-            return;
+function animateLetter(currentLetterIndex: number) {
+    let tries = getRandomInt(3, 6)
+    const inte = setInterval(() => {
+        if (tries === 0) {
+            clearInterval(inte)
+            div.value!.textContent = div.value!.textContent!.slice(0, currentLetterIndex) + text[currentLetterIndex]
+            document.dispatchEvent(new Event("letterPicked"))
+            return
         }
-        let letter = text!.charAt(currentLetterIndex);
+        div.value!.textContent = div.value!.textContent!.slice(0, currentLetterIndex) + getRandomLetter(text)
+        tries--
+    }, 15)
+}
 
-        let tries = getRandomInt(2, 5);
-        letterSwitchInterval.value = setInterval(() => {
-            if (tries <= 0) {
-                clearInterval(letterSwitchInterval.value!);
-                return;
-            }
-            let randomLetter = getRandomLetter(text!);
+function animateText() {
+    let currentLetterIndex = 0
+    animateLetter(currentLetterIndex)
 
-            textToShow = textToShow.slice(0, currentLetterIndex) + randomLetter;
-            div.value!.innerText = textToShow;
-            tries--;
-        }, 15);
-        textToShow = textToShow.slice(0, currentLetterIndex) + letter;
-        currentLetterIndex++;
-    }, 75);
-});
+    document.addEventListener("letterPicked", () => {
+        if (currentLetterIndex === text.length - 1) return
+        currentLetterIndex += 1
+        animateLetter(currentLetterIndex)
+    })
+}
+
+onMounted(animateText);
 
 onBeforeUnmount(() => {
-    clearInterval(letterInterval.value!);
-    clearInterval(letterSwitchInterval.value!);
+
 });
 </script>
 

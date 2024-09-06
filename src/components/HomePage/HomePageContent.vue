@@ -129,13 +129,16 @@ function animateTriangles() {
     <div class="container">
         <NierLeftBars :spacing="`clamp(.75rem, 2vw, 2rem)`">
             <Transition appear>
-                <NierButton class="headerButton" @click="currentlySelectedView = 'Navigation'" style="transition-delay: 0.1s">NAVIGATION </NierButton>
+                <NierButton class="headerButton" @click="currentlySelectedView = 'Navigation'"
+                    style="transition-delay: 0.1s">NAVIGATION </NierButton>
             </Transition>
             <Transition appear>
-                <NierButton class="headerButton" @click="currentlySelectedView = 'Options'" style="transition-delay: 0.15s">OPTIONS</NierButton>
+                <NierButton class="headerButton" @click="currentlySelectedView = 'Options'"
+                    style="transition-delay: 0.15s">OPTIONS</NierButton>
             </Transition>
             <Transition appear>
-                <NierButton class="headerButton" style="transition-delay: 0.2s" @click="onQuitClick">QUITTER </NierButton>
+                <NierButton class="headerButton" style="transition-delay: 0.2s" @click="onQuitClick">QUITTER
+                </NierButton>
             </Transition>
         </NierLeftBars>
         <HomePageAnimations />
