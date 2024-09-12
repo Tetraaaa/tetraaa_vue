@@ -18,7 +18,7 @@ const { backroundMusicPlaying, toggleBackgroundMusic, backroundVoicesPlaying, to
 <template>
     <div class="container">
         <video id="video" muted autoplay loop>
-            <source src="../../assets/videos/2b_chilling_forest_v3.mp4" type="video/mp4" />
+            <source src="../../assets/videos/intro_forest.mp4" type="video/mp4" />
         </video>
         <Transition appear>
             <h1>TETRAAA.FR<BlinkingText>_</BlinkingText></h1>

@@ -6,7 +6,7 @@ import NierLeftBars from "./NierLeftBars.vue";
 import Navigation from "./Navigation.vue";
 import Options from "./Options.vue";
 import quitMenuSound from "@/assets/audio/menu_close.ogg";
-import backgroundVideo from "../../assets/videos/2b_chilling_forest_v3.mp4";
+import backgroundVideo from "../../assets/videos/intro_forest.mp4";
 
 const emit = defineEmits(["show-landing"]);
 
