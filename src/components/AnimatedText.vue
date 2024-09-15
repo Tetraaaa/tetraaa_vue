@@ -1,15 +1,10 @@
 <script setup lang="ts">
+import { getRandomInt } from "@/tools/random";
 import { onBeforeUnmount, onBeforeUpdate, onMounted, onUpdated, ref, watch } from "vue";
 
 const { text } = defineProps<{ text: string }>();
 
 const div = ref<HTMLDivElement | null>(null);
-
-function getRandomInt(min: number, max: number) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min) + min);
-}
 
 function getRandomLetter(word: string) {
     return word.charAt(getRandomInt(0, word.length));

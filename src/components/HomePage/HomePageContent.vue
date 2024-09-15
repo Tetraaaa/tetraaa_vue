@@ -6,7 +6,7 @@ import NierLeftBars from "./NierLeftBars.vue";
 import Navigation from "./Navigation.vue";
 import Options from "./Options.vue";
 import quitMenuSound from "@/assets/audio/menu_close.ogg";
-import backgroundVideo from "../../assets/videos/intro_forest.mp4";
+import { getLandingPageVideo } from "@/tools/video";
 
 const emit = defineEmits(["show-landing"]);
 
@@ -41,8 +41,9 @@ function addVideoBehindMainElement() {
     video.id = "seeThroughVideo";
 
     let source = document.createElement("source");
-    source.setAttribute("src", backgroundVideo);
+    source.setAttribute("src", getLandingPageVideo());
     source.setAttribute("type", "video/mp4");
+
     video.appendChild(source);
     document.getElementById("app")?.appendChild(video);
     video.load();

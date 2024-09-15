@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import BlinkingText from "@/components/BlinkingText.vue";
 import LandingPageAnimations from "@/components/HomePage/LandingPageAnimations.vue";
+import { getLandingPageVideo } from "@/tools/video";
 import { inject, ref } from "vue";
 
 const isAnimationShown = ref(false);
@@ -18,7 +19,7 @@ const { backroundMusicPlaying, toggleBackgroundMusic, backroundVoicesPlaying, to
 <template>
     <div class="container">
         <video id="video" muted autoplay loop>
-            <source src="../../assets/videos/intro_forest.mp4" type="video/mp4" />
+            <source :src="getLandingPageVideo()" type="video/mp4" />
         </video>
         <Transition appear>
             <h1>TETRAAA.FR<BlinkingText>_</BlinkingText></h1>
