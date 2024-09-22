@@ -50,6 +50,10 @@ const routes = [
         component: () => import("./pages/DofusPage.vue"),
     },
     {
+        path: "/miom-miam",
+        component: () => import("./pages/MiomMiam/MiomMiamPage.vue"),
+    },
+    {
         path: "/404",
         component: () => import("./pages/404.vue"),
     },
