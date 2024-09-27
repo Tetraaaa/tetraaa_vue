@@ -12,7 +12,17 @@ export type Month =
     | "Novembre"
     | "Décembre";
 
+export interface Macros {
+    lipides: number;
+    acidesGrasSatures: number;
+    glucides: number;
+    sucres: number;
+    proteines: number;
+}
+
 export interface Product {
     name: string;
-    month: Month;
+    months: Month[];
+    kcal: number;
+    macros: Macros;
 }

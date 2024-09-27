@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import { months } from '@/assets/data/months';
 import { ref } from 'vue';
+import type { Month, Product } from './types';
+import { products } from './data';
+import ProductDrawer from './components/ProductDrawer.vue';
 
-const selectedMonth = ref<{ name: string; produits: string[]; }>();
-const selectedProduct = ref<string>();
+const selectedMonth = ref<Month>();
+const selectedProduct = ref<Product>();
+const months: Month[] = ["Janvier", 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
 
 function onDocumentClick(ev: MouseEvent) {
   let target = (ev.target) as HTMLElement | null
@@ -12,8 +15,7 @@ function onDocumentClick(ev: MouseEvent) {
   selectedProduct.value = undefined
 }
 
-function onProductClick(event:MouseEvent, product:string)
-{
+function onProductClick(event: MouseEvent, product: Product) {
   event.stopPropagation()
   selectedProduct.value = product
 }
@@ -24,20 +26,19 @@ function onProductClick(event:MouseEvent, product:string)
 <template>
   <div class="container" @click="onDocumentClick">
     <div class="months">
-      <div class="monthCard" @click="selectedMonth = month" v-for="month in months">{{ month.name }}</div>
+      <div class="monthCard" @click="selectedMonth = month" v-for="month in months">{{ month }}</div>
     </div>
     <div class="products">
-      <div v-if="selectedMonth" class="product" v-for="product in selectedMonth.produits"
+      <div v-if="selectedMonth" class="product"
+        v-for="product in products.filter(p => p.months.includes(selectedMonth!))"
         @click="(event) => onProductClick(event, product)">
-        <img :src="`/images/miom-miam/${product}.jpg`" />
-        <div>{{ product }}</div>
+        <img :src="`/images/miom-miam/${product.name}.jpg`" />
+        <div>{{ product.name }}</div>
       </div>
     </div>
 
   </div>
-  <div class="drawer" :style="{ transform: `translateX(${selectedProduct ? '0%' : '100%'})` }">
-    {{ selectedProduct }}
-  </div>
+  <ProductDrawer :product="selectedProduct"/>
 </template>
 
 
@@ -48,19 +49,6 @@ function onProductClick(event:MouseEvent, product:string)
   background-size: contain;
   height: 100vh;
   overflow: auto;
-}
-
-.drawer {
-  position: fixed;
-  height: 100%;
-  background-color: white;
-  border-top-left-radius: 1rem;
-  border-bottom-left-radius: 1rem;
-  top: 0;
-  right: 0;
-  width: clamp(375px, 30%, 50rem);
-  transition: transform 300ms ease;
-  box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
 .products {
