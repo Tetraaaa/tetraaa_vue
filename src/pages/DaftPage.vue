@@ -213,17 +213,17 @@ function jam() {
 .dedans {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: clamp(0.6rem, 1.5vw, 2rem);
+    gap: clamp(1rem, 1.5vw, 2rem);
     aspect-ratio: 1;
 }
 
-@media (min-width: 450px) {
+@media (min-width: 800px) {
     .dedans {
         height: 100%;
     }
 }
 
-@media (max-width: 450px) {
+@media (max-width: 800px) {
     .dedans {
         width: 100%;
     }
@@ -238,6 +238,8 @@ function jam() {
     cursor: pointer;
     min-height: 4rem;
     min-width: 4rem;
+    aspect-ratio: 1;
+    width: 100%;
     box-shadow: inset 0 0 clamp(8px, 4vw, 32px) clamp(8px, 4vw, 30px) rgba(0, 0, 0, 0.39);
     transition: filter 0.35s;
 
