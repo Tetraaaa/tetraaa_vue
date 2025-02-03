@@ -5,6 +5,7 @@ import NierButton from "./NierButton.vue";
 import NierContainer from "./NierContainer.vue";
 import NierLeftBars from "./NierLeftBars.vue";
 import { useRouter } from "vue-router";
+import { useMediaQuery } from "@vueuse/core";
 
 const pages = [
     { name: "Burger", content: "La tierlist des meilleurs burger/frites de Strasbourg en livraison." },
@@ -21,12 +22,14 @@ const pages = [
 const selectedPage = ref<{ name: string; content: string } | null>(null);
 
 const router = useRouter();
+
+const isBelow800Px = useMediaQuery('(max-width: 800px)')
 </script>
 
 <template>
     <AnimatedText class="menuLabel" text="Navigation" />
     <div class="content">
-        <NierLeftBars direction="column" spacing="1.5rem" class="options">
+        <NierLeftBars :direction="isBelow800Px ? 'row' : 'column'" :spacing="isBelow800Px ? '1rem' : '1.5rem'" class="options">
             <TransitionGroup appear>
                 <NierButton :key="page.name" class="button" @click="selectedPage = page" v-for="(page, index) in pages"
                     :style="{ transitionDelay: index * 0.05 + 's' }">{{ page.name }}</NierButton>
@@ -81,6 +84,16 @@ const router = useRouter();
 .container-leave-to {
     opacity: 0;
 }
+
+@media (max-width: 800px) {
+    .content {
+        flex-direction: column;
+    }
+    .options {
+        flex: 0 !important;
+    }
+}
+
 
 .content {
     display: flex;

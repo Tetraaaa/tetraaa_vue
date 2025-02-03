@@ -29,6 +29,7 @@ const { direction, spacing } = defineProps({
 .leftBarsChildren {
     display: flex;
     flex: 1;
+    flex-wrap: wrap;
     flex-direction: v-bind(direction);
     gap: v-bind(spacing);
 }

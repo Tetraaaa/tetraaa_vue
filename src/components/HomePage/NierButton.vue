@@ -93,15 +93,16 @@ button {
 }
 
 span {
-    display: inherit;
+    display: flex;
+    align-items: center;
     text-transform: inherit;
     flex: 1;
 
     &:before {
         content: "";
         display: inline-block;
-        height: clamp(12px, 1vw, 16px);
-        width: clamp(12px, 1vw, 16px);
+        min-height: clamp(12px, 1vw, 16px);
+        min-width: clamp(12px, 1vw, 16px);
         background: rgba(72, 70, 61, 1);
         margin-right: 6px;
         transition: background-color 0.3s ease-in-out;

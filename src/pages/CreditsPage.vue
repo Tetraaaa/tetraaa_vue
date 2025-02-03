@@ -2,6 +2,7 @@
 import creditsSound from "@/assets/audio/credits.mp3";
 import credits from "@/assets/data/credits.json";
 import BackButton from "@/components/BackButton.vue";
+import { useMediaQuery } from "@vueuse/core";
 import { onMounted, ref } from "vue";
 
 const audioPlayer = ref<HTMLAudioElement | null>(null);
@@ -10,6 +11,8 @@ onMounted(() => {
     audioPlayer.value!.volume = 0.3;
     audioPlayer.value!.play();
 });
+const isBelow700Px = useMediaQuery('(max-width: 700px)')
+
 </script>
 
 <template>
@@ -20,7 +23,7 @@ onMounted(() => {
             class="creditBlock"
             v-for="credit in credits"
             :style="{
-                textAlign: credit.priority >= 3 ? 'center' : 'initial',
+                textAlign: credit.priority >= 3 && isBelow700Px ? 'center' : 'initial',
                 fontSize: `${credit.priority * 0.5}rem`,
                 margin: `clamp(.25rem, ${(credit.priority - 2) * 1.75}vh ,2rem) 0`,
             }"

@@ -13,14 +13,15 @@
         "format": "prettier --write src/"
     },
     "dependencies": {
+        "@vueuse/core": "^12.5.0",
         "howler": "^2.2.4",
         "idb-keyval": "^6.2.1",
         "vue": "^3.4.15",
         "vue-router": "^4.2.5"
     },
     "devDependencies": {
-        "@types/howler": "^2.2.11",
         "@tsconfig/node20": "^20.1.2",
+        "@types/howler": "^2.2.11",
         "@types/node": "^20.11.10",
         "@vitejs/plugin-vue": "^5.0.4",
         "@vitejs/plugin-vue-jsx": "^3.1.0",
