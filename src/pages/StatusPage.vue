@@ -25,9 +25,9 @@ const memoryUsage = 31
     <BackButton />
     <div class="container">
         <h3>
-            État du serveur
+            État des services
         </h3>
-        <Row>
+        <Row style="width: 100%;padding: 1rem;">
             <StatusCard>
                 <StatusCardTitle title="Informations système" />
                 <StatusRow label="Uptime" value="1hr, 53mn, 12s" />
@@ -38,6 +38,15 @@ const memoryUsage = 31
                 </Column>
                 <StatusCardSubtitle subtitle="Memory Usage" />
                 <StatusProgressBar label="Memory used" :value="memoryUsage" />
+            </StatusCard>
+            <StatusCard>
+                <StatusCardTitle title="Peribot" />
+                <StatusRow label="Uptime" value="1day, 2hr, 11mn, 31s" />
+                <StatusRow label="Statut" value="🟢 Online" />
+                <StatusCardSubtitle subtitle="CPU Usage" />
+                <StatusProgressBar label="CPU" :value="5" />
+                <StatusCardSubtitle subtitle="Memory Usage" />
+                <StatusProgressBar label="Memory used" :value="57" />
             </StatusCard>
         </Row>
     </div>

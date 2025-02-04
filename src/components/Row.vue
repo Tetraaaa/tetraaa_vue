@@ -12,5 +12,8 @@
 .row {
     display: flex;
     flex-direction: row;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 </style>
