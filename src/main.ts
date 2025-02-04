@@ -18,6 +18,10 @@ const routes = [
         component: () => import("./pages/PianoPage.vue"),
     },
     {
+        path: "/statut",
+        component: () => import("./pages/StatusPage.vue"),
+    },
+    {
         path: "/daft",
         component: () => import("./pages/DaftPage.vue"),
     },

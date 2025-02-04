@@ -17,6 +17,7 @@ const pages = [
     },
     { name: "Pomme", content: "Ma foi c'est une image de pomme tout ce qu'il y a de plus banal." },
     { name: "Dofus", content: "Un petit guide visuel sur l'ordre dans lequel réaliser les succès sur Dofus pour avoir une progression fluide et agréable." },
+    { name: "Statut", content: "Quelques infos sur le statut actuel du serveur et des autres services." },
     { name: "Crédits", content: "La liste de tout ce qui m'a inspiré pour faire ce site, et les références des images et bouts de code utilisés." },
 ];
 const selectedPage = ref<{ name: string; content: string } | null>(null);
