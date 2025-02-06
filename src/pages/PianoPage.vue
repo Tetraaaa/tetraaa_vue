@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Context, loaded, Sampler, setContext, start } from 'tone';
+import { Context, loaded, now, Sampler, setContext, start } from 'tone';
 
 
 const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
@@ -17,10 +17,42 @@ setContext(new Context({ latencyHint: "playback", lookAhead: 0 }))
 
 const sampler = new Sampler({
     urls: {
-        "C5": "C5v5.webm"
+        "A0": "A0.webm",
+        "A1": "A1.webm",
+        "A2": "A2.webm",
+        "A3": "A3.webm",
+        "A4": "A4.webm",
+        "A5": "A5.webm",
+        "A6": "A6.webm",
+        "A7": "A7.webm",
+        "C1": "C1.webm",
+        "C2": "C2.webm",
+        "C3": "C3.webm",
+        "C4": "C4.webm",
+        "C5": "C5.webm",
+        "C6": "C6.webm",
+        "C7": "C7.webm",
+        "C8": "C8.webm",
+        "D#1": "Ds1.webm",
+        "D#2": "Ds2.webm",
+        "D#3": "Ds3.webm",
+        "D#4": "Ds4.webm",
+        "D#5": "Ds5.webm",
+        "D#6": "Ds6.webm",
+        "D#7": "Ds7.webm",
+        "F#1": "Fs1.webm",
+        "F#2": "Fs2.webm",
+        "F#3": "Fs3.webm",
+        "F#4": "Fs4.webm",
+        "F#5": "Fs5.webm",
+        "F#6": "Fs6.webm",
+        "F#7": "Fs7.webm",
     },
-    release: 1,
     baseUrl: "audio/piano/",
+    release: 0.75,
+    onload: () => console.log("loaded")
+
+
 }).toDestination()
 
 function onMIDIMessage(event: MIDIMessageEvent) {
@@ -32,13 +64,18 @@ function onMIDIMessage(event: MIDIMessageEvent) {
     onNotePlayed(payload[1], payload[2])
 }
 
-function onNotePlayed(noteIndex: number, strength: number) {
-    if (strength <= 0) return
-    console.log("Note jouée : ", noteIndex, " force : ", strength);
+function onNotePlayed(noteIndex: number, velocity: number) {
     const notePlayed = `${NOTES[noteIndex % NOTES.length]}${Math.floor(noteIndex / NOTES.length) - 1}`
+    if (velocity <= 0) {
+        sampler.triggerRelease(notePlayed);
+        return
+    }
+    const velocityPlayed = velocity / 127
     const noteHtmlContainer = document.getElementById("notePlayed")
+    console.log("Note jouée : ", notePlayed, " force : ", velocityPlayed);
+
     if (noteHtmlContainer) noteHtmlContainer.innerText = notePlayed
-    sampler.triggerAttackRelease(notePlayed, 1);
+    sampler.triggerAttack(notePlayed, now(), velocityPlayed);
 }
 </script>
 
