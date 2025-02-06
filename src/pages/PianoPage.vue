@@ -1,8 +1,6 @@
 <script setup lang="ts">
+import { isMidiNote, midiIndexToNote, NOTES, PIANO_ROLL } from '@/tools/midi';
 import { Context, loaded, now, Sampler, setContext, start } from 'tone';
-
-
-const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
 
 navigator.requestMIDIAccess().then(midiAccess => {
     let inx = 0
@@ -65,25 +63,88 @@ function onMIDIMessage(event: MIDIMessageEvent) {
 }
 
 function onNotePlayed(noteIndex: number, velocity: number) {
-    const notePlayed = `${NOTES[noteIndex % NOTES.length]}${Math.floor(noteIndex / NOTES.length) - 1}`
+
+    if (!isMidiNote(noteIndex)) return
+
+    const notePlayed = midiIndexToNote(noteIndex)
     if (velocity <= 0) {
-        sampler.triggerRelease(notePlayed);
+        releaseNote(notePlayed)
         return
     }
     const velocityPlayed = velocity / 127
-    const noteHtmlContainer = document.getElementById("notePlayed")
-    console.log("Note jouée : ", notePlayed, " force : ", velocityPlayed);
-
-    if (noteHtmlContainer) noteHtmlContainer.innerText = notePlayed
-    sampler.triggerAttack(notePlayed, now(), velocityPlayed);
+    attackNote(notePlayed, velocityPlayed)
 }
+function attackNote(note: string, velocity: number) {
+    sampler.triggerAttack(note, now(), velocity);
+    const noteHtmlContainer = document.getElementById("notePlayed")
+    console.log("Note jouée : ", note);
+    if (noteHtmlContainer) noteHtmlContainer.innerText = note
+}
+
+function releaseNote(note: string) {
+    sampler.triggerRelease(note);
+}
+
 </script>
 
 <template>
-    <div id="notePlayed"></div>
+    <div class="container">
+        <div id="notePlayed" style="font-weight: bold;"></div>
+        <div class="piano">
+            <div v-for="note, inx in PIANO_ROLL.filter(n => !n.includes('#'))" :style="{ zIndex: 100 - inx }"
+                @mousedown="attackNote(note,
+                    0.75)" @mouseup="releaseNote(note)" class="note">
+                <div @mousedown="(e) => {
+                    e.stopPropagation(); attackNote(note[0] + '#' + note[1],
+                        0.75)
+                }" @mouseup="releaseNote(note[0] + '#' + note[1])" class="note black"
+                    v-if="!note.includes('E') && !note.includes('B')">
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <style scoped lang="scss">
+.container {
+    background: rgb(26, 26, 27);
+    background: linear-gradient(rgb(41, 41, 41) 0%, rgb(24, 24, 41) 75%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    color: white;
+}
+
+.piano {
+    display: flex;
+    gap: 2px;
+    width: 100vw;
+    justify-content: center;
+}
+
+.note {
+    height: 20vh;
+    min-height: 1rem;
+    background-color: ivory;
+    flex: 1;
+    min-width: 30px;
+    position: relative;
+    color: black;
+    font-size: 9px;
+
+    &.black {
+        background-color: black;
+        top: 0;
+        left: 77%;
+        height: 12vh;
+        width: 50%;
+        color: white;
+        min-width: unset;
+    }
+}
+
 #notePlayed {
     font-size: 3rem;
 }
