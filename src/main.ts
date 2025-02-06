@@ -14,6 +14,10 @@ const routes = [
         component: () => import("./pages/BurgerPage.vue"),
     },
     {
+        path: "/piano",
+        component: () => import("./pages/PianoPage.vue"),
+    },
+    {
         path: "/daft",
         component: () => import("./pages/DaftPage.vue"),
     },
