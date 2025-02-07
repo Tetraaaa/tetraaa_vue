@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { isMidiNote, midiIndexToNote, NOTES, PIANO_ROLL } from '@/tools/midi';
 import { Context, loaded, now, Sampler, setContext, start } from 'tone';
-import { onMounted, onUnmounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref, watch } from 'vue';
 
 let sampler: Sampler
 const midiAccess = ref<MIDIAccess>();
+const lastPlayedKey = ref<string>();
+const heldNotes = ref<string[]>([]);
+
 
 onMounted(() => {
     navigator.requestMIDIAccess().then(access => {
@@ -73,7 +76,6 @@ function onMIDIMessage(event: MIDIMessageEvent) {
 }
 
 function onNotePlayed(noteIndex: number, velocity: number) {
-
     if (!isMidiNote(noteIndex)) return
 
     const notePlayed = midiIndexToNote(noteIndex)
@@ -85,31 +87,34 @@ function onNotePlayed(noteIndex: number, velocity: number) {
     attackNote(notePlayed, velocityPlayed)
 }
 function attackNote(note: string, velocity: number) {
+    lastPlayedKey.value = note
+    heldNotes.value.push(note)
     sampler.triggerAttack(note, now(), velocity);
-    const noteHtmlContainer = document.getElementById("notePlayed")
-    console.log("Note jouée : ", note);
-    if (noteHtmlContainer) noteHtmlContainer.innerText = note
 }
 
 function releaseNote(note: string) {
-    sampler.triggerRelease(note);
+    heldNotes.value = heldNotes.value.filter(n => n !== note)
+    sampler.triggerRelease(note, now());
 }
 
 </script>
 
 <template>
     <div class="container">
-        <div id="notePlayed" style="font-weight: bold;"></div>
+        <div id="notePlayed" style="font-weight: bold;">{{ lastPlayedKey }}</div>
         <div class="piano">
-            <div v-for="note, inx in PIANO_ROLL.filter(n => !n.includes('#'))" :style="{ zIndex: 100 - inx }"
+            <div v-for="note, inx in PIANO_ROLL.filter(n => !n.includes('#'))"
+                :style="{ zIndex: 100 - inx, background: heldNotes.includes(note) ? `linear-gradient(45deg, ivory, #7d65c5)` : '' }"
                 @mousedown="attackNote(note,
                     0.75)" @mouseup="releaseNote(note)" class="note">
-                <div @mousedown="(e) => {
-                    e.stopPropagation(); attackNote(note[0] + '#' + note[1],
-                        0.75)
-                }" @mouseup="releaseNote(note[0] + '#' + note[1])" class="note black"
+                <div :style="{ background: heldNotes.includes(note[0] + '#' + note[1]) ? `linear-gradient(45deg, black, #7d65c5)` : '' }"
+                    @mousedown="(e) => {
+                        e.stopPropagation(); attackNote(note[0] + '#' + note[1],
+                            0.75)
+                    }" @mouseup="releaseNote(note[0] + '#' + note[1])" class="note black"
                     v-if="!note.includes('E') && !note.includes('B')">
                 </div>
+                <div class="note-highlight" v-if="heldNotes.includes(note)"></div>
             </div>
         </div>
     </div>
@@ -144,6 +149,7 @@ function releaseNote(note: string) {
     color: black;
     font-size: 9px;
 
+
     &.black {
         background-color: black;
         top: 0;
@@ -153,6 +159,15 @@ function releaseNote(note: string) {
         color: white;
         min-width: unset;
     }
+}
+
+.note-highlight {
+    position: absolute;
+    top: 0;
+    transform-origin: bottom;
+    background: red;
+    transform: scaleY(2);
+    height: 10px;
 }
 
 #notePlayed {
