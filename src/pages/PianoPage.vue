@@ -1,10 +1,17 @@
 <script setup lang="ts">
+import BackButton from '@/components/BackButton.vue';
+import Modal from '@/components/Modal.vue';
+import PianoLoadingModal from '@/components/PianoPage/PianoLoadingModal.vue';
+import PianoSettingsModal from '@/components/PianoPage/PianoSettingsModal.vue';
 import { isMidiNote, midiIndexToNote, NOTES, PIANO_ROLL } from '@/tools/midi';
-import { Context, loaded, now, Sampler, setContext, start } from 'tone';
+import { Context, Envelope, loaded, now, Sampler, setContext, start } from 'tone';
 import { onMounted, onUnmounted, ref, watch } from 'vue';
 
-let sampler: Sampler
+let sampler: Sampler;
 const midiAccess = ref<MIDIAccess>();
+const isLoaded = ref(false);
+const loadingModalOpen = ref(true);
+const settingsModalOpen = ref(false);
 const lastPlayedKey = ref<string>();
 const heldNotes = ref<string[]>([]);
 
@@ -19,7 +26,8 @@ onMounted(() => {
         });
     })
 
-    setContext(new Context({ latencyHint: "playback", lookAhead: 0 }))
+    const toneJsContext = new Context({ latencyHint: "playback", lookAhead: 0 })
+    setContext(toneJsContext)
 
     sampler = new Sampler({
         urls: {
@@ -55,11 +63,11 @@ onMounted(() => {
             "F#7": "Fs7.webm",
         },
         baseUrl: "audio/piano/",
-        release: 0.75,
-        onload: () => console.log("loaded")
-
-
+        attack: 0,
+        release: 0.8,
+        onload: () => isLoaded.value = true,
     }).toDestination()
+
 })
 
 onUnmounted(() => {
@@ -94,12 +102,21 @@ function attackNote(note: string, velocity: number) {
 
 function releaseNote(note: string) {
     heldNotes.value = heldNotes.value.filter(n => n !== note)
-    sampler.triggerRelease(note, now());
+    sampler.triggerRelease(note);
 }
 
 </script>
 
 <template>
+    <BackButton />
+    <div class="settings" @click="settingsModalOpen = true">
+        <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24"
+            width="24px" fill="#5f6368">
+            <rect fill="none" height="24" width="24" />
+            <path
+                d="M19.5,12c0-0.23-0.01-0.45-0.03-0.68l1.86-1.41c0.4-0.3,0.51-0.86,0.26-1.3l-1.87-3.23c-0.25-0.44-0.79-0.62-1.25-0.42 l-2.15,0.91c-0.37-0.26-0.76-0.49-1.17-0.68l-0.29-2.31C14.8,2.38,14.37,2,13.87,2h-3.73C9.63,2,9.2,2.38,9.14,2.88L8.85,5.19 c-0.41,0.19-0.8,0.42-1.17,0.68L5.53,4.96c-0.46-0.2-1-0.02-1.25,0.42L2.41,8.62c-0.25,0.44-0.14,0.99,0.26,1.3l1.86,1.41 C4.51,11.55,4.5,11.77,4.5,12s0.01,0.45,0.03,0.68l-1.86,1.41c-0.4,0.3-0.51,0.86-0.26,1.3l1.87,3.23c0.25,0.44,0.79,0.62,1.25,0.42 l2.15-0.91c0.37,0.26,0.76,0.49,1.17,0.68l0.29,2.31C9.2,21.62,9.63,22,10.13,22h3.73c0.5,0,0.93-0.38,0.99-0.88l0.29-2.31 c0.41-0.19,0.8-0.42,1.17-0.68l2.15,0.91c0.46,0.2,1,0.02,1.25-0.42l1.87-3.23c0.25-0.44,0.14-0.99-0.26-1.3l-1.86-1.41 C19.49,12.45,19.5,12.23,19.5,12z M12.04,15.5c-1.93,0-3.5-1.57-3.5-3.5s1.57-3.5,3.5-3.5s3.5,1.57,3.5,3.5S13.97,15.5,12.04,15.5z" />
+        </svg>
+    </div>
     <div class="container">
         <div id="notePlayed" style="font-weight: bold;">{{ lastPlayedKey }}</div>
         <div class="piano">
@@ -118,6 +135,8 @@ function releaseNote(note: string) {
             </div>
         </div>
     </div>
+    <PianoLoadingModal :is-open="loadingModalOpen" :is-loaded="isLoaded" @close="start(); loadingModalOpen = false" />
+    <PianoSettingsModal :is-open="settingsModalOpen" @close="settingsModalOpen = false" />
 </template>
 
 <style scoped lang="scss">
@@ -130,6 +149,14 @@ function releaseNote(note: string) {
     align-items: center;
     justify-content: flex-end;
     color: white;
+}
+
+.settings {
+    cursor: pointer;
+    background: transparent;
+    position: fixed;
+    right: 8px;
+    top: 8px
 }
 
 .piano {
