@@ -12,6 +12,9 @@ const { isOpen, isLoaded, onClose } = defineProps<{ isOpen: boolean, isLoaded: b
     <Modal :is-open="isOpen" @close=""
         :container-styles="{ background: `linear-gradient(45deg, rgb(61, 61, 117), rgb(33 33 87))`, color: 'white' }">
         <div class="modal-content">
+            <h3 style="font-weight: bold;">Cette page utilise l'audio de votre navigateur</h3>
+            <span>Vous pouvez brancher un clavier MIDI pour jouer avec, ou directement cliquer sur les touches du
+                piano.</span>
             <img :src="loadingGif" />
             <div class="loading" v-if="!isLoaded" style="display: flex;align-items: center;gap:1rem">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" width="20"

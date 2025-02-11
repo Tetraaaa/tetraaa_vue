@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import BackButton from '@/components/BackButton.vue';
-import Modal from '@/components/Modal.vue';
 import PianoLoadingModal from '@/components/PianoPage/PianoLoadingModal.vue';
 import PianoSettingsModal from '@/components/PianoPage/PianoSettingsModal.vue';
-import { isMidiNote, midiIndexToNote, NOTES, NOTES_LATIN, PIANO_ROLL } from '@/tools/midi';
-import { Context, Envelope, loaded, now, Sampler, setContext, start } from 'tone';
+import { isMidiNote, midiIndexToNote, PIANO_ROLL, type Note } from '@/tools/midi';
+import { Context, now, Sampler, setContext, start } from 'tone';
 import { onMounted, onUnmounted, ref, watch } from 'vue';
 
 let sampler: Sampler;
@@ -12,7 +11,7 @@ const midiAccess = ref<MIDIAccess>();
 const isLoaded = ref(false);
 const loadingModalOpen = ref(true);
 const settingsModalOpen = ref(false);
-const lastPlayedKeyIndex = ref<number>();
+const lastPlayedNote = ref<Note>();
 const heldNotes = ref<string[]>([]);
 
 //Piano settings
@@ -93,30 +92,28 @@ function onMIDIMessage(event: MIDIMessageEvent) {
     for (const character of event.data) {
         payload.push(Number(character))
     }
-    onNotePlayed(payload[1], payload[2])
+    if (isMidiNote(payload[1])) onNotePlayed(midiIndexToNote(payload[1]), payload[2])
 }
 
-function onNotePlayed(noteIndex: number, velocity: number) {
-    if (!isMidiNote(noteIndex)) return
-
-    const notePlayed = midiIndexToNote(noteIndex)
+function onNotePlayed(note: Note, velocity: number) {
+    isMidiNote
     if (velocity <= 0) {
-        releaseNote(notePlayed)
+        releaseNote(note)
         return
     }
     const velocityPlayed = velocity / 127
-    lastPlayedKeyIndex.value = noteIndex
-    attackNote(notePlayed, velocityPlayed)
+    attackNote(note, velocityPlayed)
 }
 
-function attackNote(note: string, velocity: number) {
-    heldNotes.value.push(note)
-    sampler.triggerAttack(note, now(), velocity);
+function attackNote(note: Note, velocity: number) {
+    heldNotes.value.push(note.englishNotation)
+    lastPlayedNote.value = note
+    sampler.triggerAttack(note.englishNotation, now(), velocity);
 }
 
-function releaseNote(note: string) {
-    heldNotes.value = heldNotes.value.filter(n => n !== note)
-    sampler.triggerRelease(note, now() + sustain.value);
+function releaseNote(note: Note) {
+    heldNotes.value = heldNotes.value.filter(n => n !== note.englishNotation)
+    sampler.triggerRelease(note.englishNotation, now() + sustain.value);
 }
 
 </script>
@@ -132,21 +129,20 @@ function releaseNote(note: string) {
         </svg>
     </div>
     <div class="container">
-        <div v-if="lastPlayedKeyIndex !== undefined" id="notePlayed" style="font-weight: bold;">{{
-            midiIndexToNote(lastPlayedKeyIndex, isEnglishNotation ? "english" : "latin") }}</div>
+        <div v-if="lastPlayedNote !== undefined" id="notePlayed" style="font-weight: bold;">{{
+            isEnglishNotation ? lastPlayedNote.englishNotation : lastPlayedNote.latinNotation }}</div>
         <div class="piano">
-            <div v-for="note, inx in PIANO_ROLL.filter(n => !n.includes('#'))"
-                :style="{ zIndex: 100 - inx, background: heldNotes.includes(note) ? `linear-gradient(45deg, ivory, #7d65c5)` : '' }"
+            <div v-for="note, inx in PIANO_ROLL"
+                :style="{ zIndex: 100 - inx, background: heldNotes.includes(note.englishNotation) ? `linear-gradient(45deg, ivory, #7d65c5)` : '' }"
                 @mousedown="attackNote(note,
                     0.75)" @mouseup="releaseNote(note)" class="note">
-                <div :style="{ background: heldNotes.includes(note[0] + '#' + note[1]) ? `linear-gradient(45deg, black, #7d65c5)` : '' }"
+                <div :style="{ background: heldNotes.includes(note.englishNotation[0] + '#' + note.englishNotation[1]) ? `linear-gradient(45deg, black, #7d65c5)` : '' }"
                     @mousedown="(e) => {
-                        e.stopPropagation(); attackNote(note[0] + '#' + note[1],
+                        e.stopPropagation(); attackNote(midiIndexToNote(note.midiIndex + 1),
                             0.75)
-                    }" @mouseup="releaseNote(note[0] + '#' + note[1])" class="note black"
-                    v-if="!note.includes('E') && !note.includes('B')">
+                    }" @mouseup="releaseNote(midiIndexToNote(note.midiIndex + 1))" class="note black"
+                    v-if="!note.englishNotation.includes('E') && !note.englishNotation.includes('B')">
                 </div>
-                <div class="note-highlight" v-if="heldNotes.includes(note)"></div>
             </div>
         </div>
     </div>
@@ -204,15 +200,6 @@ function releaseNote(note: string) {
         color: white;
         min-width: unset;
     }
-}
-
-.note-highlight {
-    position: absolute;
-    top: 0;
-    transform-origin: bottom;
-    background: red;
-    transform: scaleY(2);
-    height: 10px;
 }
 
 #notePlayed {
