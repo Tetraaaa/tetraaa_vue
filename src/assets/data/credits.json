@@ -62,16 +62,6 @@
         "priority": 2
     },
     {
-        "name": "Neon Genesis Evangelion",
-        "link": "https://www.evangelion.co.jp/",
-        "priority": 2
-    },
-    {
-        "name": "Yprac",
-        "link": "https://www.yprac.com/",
-        "priority": 2
-    },
-    {
         "name": "Dofus",
         "link": "https://www.dofus.com/fr",
         "priority": 2
@@ -79,6 +69,11 @@
     {
         "name": "Conway's Game of Life",
         "link": "https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life",
+        "priority": 2
+    },
+    {
+        "name": "dotpiano.com",
+        "link": "https://dotpiano.com",
         "priority": 2
     },
     {
@@ -118,6 +113,11 @@
     {
         "name": "Photomode pour NieR:Automata",
         "link": "https://opm.fransbouma.com/Cameras/nierautomata.htm",
+        "priority": 2
+    },
+    {
+        "name": "Tone.js",
+        "link": "https://tonejs.github.io/",
         "priority": 2
     }
 ]

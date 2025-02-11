@@ -8,9 +8,9 @@ import { useRouter } from "vue-router";
 import { useMediaQuery } from "@vueuse/core";
 
 const pages = [
-    { name: "Burger", content: "La tierlist des meilleurs burger/frites de Strasbourg en livraison." },
-    { name: "Daft", content: 'Une soundboard qui fait référence à "Harder, Better, Faster, Stronger" des Daft Punk.' },
     { name: "GitHub", content: "Les sources pour ce site, et pour mes autres projets." },
+    { name: "Daft", content: 'Une soundboard qui fait référence à "Harder, Better, Faster, Stronger" des Daft Punk.' },
+    { name: "Piano", content: "Un petit piano virtuel, jouable en cliquant sur les touches ou directement en branchant un clavier MIDI." },
     {
         name: "Rogue Like",
         content: "Comme son nom l'indique, un petit prototype de rogue lite inspiré par Crypt of the NecroDancer, développé sous Unity.",
@@ -29,7 +29,8 @@ const isBelow800Px = useMediaQuery('(max-width: 800px)')
 <template>
     <AnimatedText class="menuLabel" text="Navigation" />
     <div class="content">
-        <NierLeftBars :direction="isBelow800Px ? 'row' : 'column'" :spacing="isBelow800Px ? '1rem' : '1.5rem'" class="options">
+        <NierLeftBars :direction="isBelow800Px ? 'row' : 'column'" :spacing="isBelow800Px ? '1rem' : '1.5rem'"
+            class="options">
             <TransitionGroup appear>
                 <NierButton :key="page.name" class="button" @click="selectedPage = page" v-for="(page, index) in pages"
                     :style="{ transitionDelay: index * 0.05 + 's' }">{{ page.name }}</NierButton>
@@ -89,6 +90,7 @@ const isBelow800Px = useMediaQuery('(max-width: 800px)')
     .content {
         flex-direction: column;
     }
+
     .options {
         flex: 0 !important;
     }
