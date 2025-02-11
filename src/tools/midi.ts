@@ -8,8 +8,9 @@ export function isMidiNote(keyIndex: number) {
     return keyIndex >= 21 && keyIndex <= 108
 }
 
-export function midiIndexToNote(keyIndex: number) {
-    if (!isMidiNote(keyIndex)) return "C5"
+export function midiIndexToNote(keyIndex: number, variant: 'english' | 'latin' = 'english') {
+    if (!isMidiNote(keyIndex)) return variant === 'latin' ? "Do5": "C5"
     keyIndex -= 12
-    return `${NOTES[keyIndex % NOTES.length]}${Math.floor(keyIndex / NOTES.length)}`
+    const notesArray = variant === 'english' ? NOTES : NOTES_LATIN
+    return `${notesArray[keyIndex % notesArray.length]}${Math.floor(keyIndex / notesArray.length)}`
 }

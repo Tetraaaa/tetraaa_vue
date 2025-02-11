@@ -3,7 +3,7 @@ import BackButton from '@/components/BackButton.vue';
 import Modal from '@/components/Modal.vue';
 import PianoLoadingModal from '@/components/PianoPage/PianoLoadingModal.vue';
 import PianoSettingsModal from '@/components/PianoPage/PianoSettingsModal.vue';
-import { isMidiNote, midiIndexToNote, NOTES, PIANO_ROLL } from '@/tools/midi';
+import { isMidiNote, midiIndexToNote, NOTES, NOTES_LATIN, PIANO_ROLL } from '@/tools/midi';
 import { Context, Envelope, loaded, now, Sampler, setContext, start } from 'tone';
 import { onMounted, onUnmounted, ref, watch } from 'vue';
 
@@ -12,9 +12,14 @@ const midiAccess = ref<MIDIAccess>();
 const isLoaded = ref(false);
 const loadingModalOpen = ref(true);
 const settingsModalOpen = ref(false);
-const lastPlayedKey = ref<string>();
+const lastPlayedKeyIndex = ref<number>();
 const heldNotes = ref<string[]>([]);
 
+//Piano settings
+const attack = ref(0);
+const sustain = ref(0);
+const release = ref(0.8);
+const isEnglishNotation = ref(false);
 
 onMounted(() => {
     navigator.requestMIDIAccess().then(access => {
@@ -74,6 +79,14 @@ onUnmounted(() => {
     midiAccess.value?.inputs.forEach(entry => entry.removeEventListener("midimessage", onMIDIMessage))
 })
 
+watch(attack, (newAttack) => {
+    sampler.attack = newAttack
+})
+
+watch(release, (newRelease) => {
+    sampler.release = newRelease
+})
+
 function onMIDIMessage(event: MIDIMessageEvent) {
     if (!event.data) return
     let payload = []
@@ -92,17 +105,18 @@ function onNotePlayed(noteIndex: number, velocity: number) {
         return
     }
     const velocityPlayed = velocity / 127
+    lastPlayedKeyIndex.value = noteIndex
     attackNote(notePlayed, velocityPlayed)
 }
+
 function attackNote(note: string, velocity: number) {
-    lastPlayedKey.value = note
     heldNotes.value.push(note)
     sampler.triggerAttack(note, now(), velocity);
 }
 
 function releaseNote(note: string) {
     heldNotes.value = heldNotes.value.filter(n => n !== note)
-    sampler.triggerRelease(note);
+    sampler.triggerRelease(note, now() + sustain.value);
 }
 
 </script>
@@ -118,7 +132,8 @@ function releaseNote(note: string) {
         </svg>
     </div>
     <div class="container">
-        <div id="notePlayed" style="font-weight: bold;">{{ lastPlayedKey }}</div>
+        <div v-if="lastPlayedKeyIndex !== undefined" id="notePlayed" style="font-weight: bold;">{{
+            midiIndexToNote(lastPlayedKeyIndex, isEnglishNotation ? "english" : "latin") }}</div>
         <div class="piano">
             <div v-for="note, inx in PIANO_ROLL.filter(n => !n.includes('#'))"
                 :style="{ zIndex: 100 - inx, background: heldNotes.includes(note) ? `linear-gradient(45deg, ivory, #7d65c5)` : '' }"
@@ -136,7 +151,10 @@ function releaseNote(note: string) {
         </div>
     </div>
     <PianoLoadingModal :is-open="loadingModalOpen" :is-loaded="isLoaded" @close="start(); loadingModalOpen = false" />
-    <PianoSettingsModal :is-open="settingsModalOpen" @close="settingsModalOpen = false" />
+    <PianoSettingsModal :attack="attack" :release="release" :sustain="sustain" @attack-change="val => attack = val"
+        @release-change="val => release = val" @sustain-change="val => sustain = val" :is-open="settingsModalOpen"
+        @close="settingsModalOpen = false" :is-english-notation="isEnglishNotation"
+        @notation-toggle="val => isEnglishNotation = val" />
 </template>
 
 <style scoped lang="scss">

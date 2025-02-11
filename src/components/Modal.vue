@@ -4,7 +4,7 @@ const { isOpen, onClose, containerStyles } = defineProps<{ isOpen: boolean, onCl
 
 <template>
     <div v-if="isOpen" class="modal-backdrop" @click="onClose">
-        <div class="modal-container" :style="containerStyles">
+        <div @click="e => e.stopPropagation()" class="modal-container" :style="containerStyles">
             <slot />
         </div>
     </div>
