@@ -3,10 +3,15 @@ import BackButton from '@/components/BackButton.vue';
 import PianoLoadingModal from '@/components/PianoPage/PianoLoadingModal.vue';
 import PianoSettingsModal from '@/components/PianoPage/PianoSettingsModal.vue';
 import { isMidiNote, midiIndexToNote, PIANO_ROLL, type Note } from '@/tools/midi';
-import { Context, now, Sampler, setContext, start } from 'tone';
+import { Context, now, PolySynth, Sampler, setContext, start, Synth, type SynthOptions } from 'tone';
 import { onMounted, onUnmounted, ref, watch } from 'vue';
 
-let sampler: Sampler;
+let main: Sampler | PolySynth;
+let instruments: {
+    pianoSampler: Sampler;
+    synth: PolySynth<Synth<SynthOptions>>;
+    duckSampler: Sampler;
+};
 const midiAccess = ref<MIDIAccess>();
 const isLoaded = ref(false);
 const loadingModalOpen = ref(true);
@@ -15,6 +20,7 @@ const lastPlayedNote = ref<Note>();
 const heldNotes = ref<string[]>([]);
 
 //Piano settings
+const instrumentPlayed = ref<"Piano" | "Synth" | "Duck">('Piano');
 const attack = ref(0);
 const sustain = ref(0);
 const release = ref(0.8);
@@ -33,7 +39,67 @@ onMounted(() => {
     const toneJsContext = new Context({ latencyHint: "playback", lookAhead: 0 })
     setContext(toneJsContext)
 
-    sampler = new Sampler({
+    instruments = loadInstruments()
+    main = instruments.pianoSampler.toDestination()
+})
+
+onUnmounted(() => {
+    midiAccess.value?.inputs.forEach(entry => entry.removeEventListener("midimessage", onMIDIMessage))
+})
+
+watch(attack, (newAttack) => {
+    if ((main as Sampler).attack) (main as Sampler).attack = newAttack
+})
+
+watch(release, (newRelease) => {
+    if ((main as Sampler).release) (main as Sampler).release = newRelease
+})
+
+watch(instrumentPlayed, (newInstrument) => {
+    if (newInstrument === 'Synth') {
+        main = instruments.synth
+    }
+    else if (newInstrument === "Duck") {
+        main = instruments.duckSampler
+    }
+    else {
+        main = instruments.pianoSampler
+    }
+    main.toDestination()
+})
+
+function onMIDIMessage(event: MIDIMessageEvent) {
+    if (!event.data) return
+    let payload = []
+    for (const character of event.data) {
+        payload.push(Number(character))
+    }
+    if (isMidiNote(payload[1])) onNotePlayed(midiIndexToNote(payload[1]), payload[2])
+}
+
+function onNotePlayed(note: Note, velocity: number) {
+    isMidiNote
+    if (velocity <= 0) {
+        releaseNote(note)
+        return
+    }
+    const velocityPlayed = velocity / 127
+    attackNote(note, velocityPlayed)
+}
+
+function attackNote(note: Note, velocity: number) {
+    heldNotes.value.push(note.englishNotation)
+    lastPlayedNote.value = note
+    main.triggerAttack(note.englishNotation, now(), velocity);
+}
+
+function releaseNote(note: Note) {
+    heldNotes.value = heldNotes.value.filter(n => n !== note.englishNotation)
+    main.triggerRelease(note.englishNotation, now() + sustain.value);
+}
+
+function loadInstruments() {
+    const pianoSampler = new Sampler({
         urls: {
             "A0": "A0.webm",
             "A1": "A1.webm",
@@ -70,50 +136,17 @@ onMounted(() => {
         attack: 0,
         release: 0.8,
         onload: () => isLoaded.value = true,
-    }).toDestination()
-
-})
-
-onUnmounted(() => {
-    midiAccess.value?.inputs.forEach(entry => entry.removeEventListener("midimessage", onMIDIMessage))
-})
-
-watch(attack, (newAttack) => {
-    sampler.attack = newAttack
-})
-
-watch(release, (newRelease) => {
-    sampler.release = newRelease
-})
-
-function onMIDIMessage(event: MIDIMessageEvent) {
-    if (!event.data) return
-    let payload = []
-    for (const character of event.data) {
-        payload.push(Number(character))
-    }
-    if (isMidiNote(payload[1])) onNotePlayed(midiIndexToNote(payload[1]), payload[2])
-}
-
-function onNotePlayed(note: Note, velocity: number) {
-    isMidiNote
-    if (velocity <= 0) {
-        releaseNote(note)
-        return
-    }
-    const velocityPlayed = velocity / 127
-    attackNote(note, velocityPlayed)
-}
-
-function attackNote(note: Note, velocity: number) {
-    heldNotes.value.push(note.englishNotation)
-    lastPlayedNote.value = note
-    sampler.triggerAttack(note.englishNotation, now(), velocity);
-}
-
-function releaseNote(note: Note) {
-    heldNotes.value = heldNotes.value.filter(n => n !== note.englishNotation)
-    sampler.triggerRelease(note.englishNotation, now() + sustain.value);
+    })
+    const synth = new PolySynth({ volume: -10 })
+    const duckSampler = new Sampler({
+        urls: {
+            "C#4": "quack_Cs4.webm",
+        },
+        baseUrl: "audio/piano/",
+        attack: 0,
+        release: 0.8,
+    })
+    return { pianoSampler, synth, duckSampler }
 }
 
 </script>
@@ -147,7 +180,8 @@ function releaseNote(note: Note) {
         </div>
     </div>
     <PianoLoadingModal :is-open="loadingModalOpen" :is-loaded="isLoaded" @close="start(); loadingModalOpen = false" />
-    <PianoSettingsModal :attack="attack" :release="release" :sustain="sustain" @attack-change="val => attack = val"
+    <PianoSettingsModal :attack="attack" :release="release" :sustain="sustain" :instrument-played="instrumentPlayed"
+        @instrument-change="val => instrumentPlayed = val" @attack-change="val => attack = val"
         @release-change="val => release = val" @sustain-change="val => sustain = val" :is-open="settingsModalOpen"
         @close="settingsModalOpen = false" :is-english-notation="isEnglishNotation"
         @notation-toggle="val => isEnglishNotation = val" />

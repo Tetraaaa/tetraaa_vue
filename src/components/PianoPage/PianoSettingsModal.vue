@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import Modal from "../Modal.vue";
 
-const { isOpen, onClose, attack, release, onAttackChange, onReleaseChange, isEnglishNotation, onNotationToggle, onSustainChange, sustain } = defineProps<{
+const { isOpen, onClose, attack, release, onAttackChange, onReleaseChange, isEnglishNotation, onNotationToggle, onSustainChange, sustain, instrumentPlayed, onInstrumentChange } = defineProps<{
     isOpen: boolean;
     onClose: () => void;
+    instrumentPlayed: "Piano" | "Synth" | "Duck";
     attack: number;
     release: number;
     sustain: number;
     isEnglishNotation: boolean
     onAttackChange: (attack: number) => void;
+    onInstrumentChange: (instrument: "Piano" | "Synth" | "Duck") => void;
     onReleaseChange: (release: number) => void;
     onSustainChange: (sustain: number) => void;
     onNotationToggle: (isEnglishNotation: boolean) => void;
@@ -22,6 +24,15 @@ const { isOpen, onClose, attack, release, onAttackChange, onReleaseChange, isEng
         :container-styles="{ background: `linear-gradient(45deg, rgb(61, 61, 117), rgb(33 33 87))`, color: 'white' }">
         <div class="modal-header">Paramètres</div>
         <div class="modal-content">
+            <div class="row">
+                Instrument
+                <input :checked="instrumentPlayed === 'Piano'" @change="onInstrumentChange('Piano')" type="radio"
+                    name="instrument" id="piano">🎹
+                <input :checked="instrumentPlayed === 'Synth'" @change="onInstrumentChange('Synth')" type="radio"
+                    name="instrument" id="synth">🌊
+                <input :checked="instrumentPlayed === 'Duck'" @change="onInstrumentChange('Duck')" type="radio"
+                    name="instrument" id="duck">🦆
+            </div>
             <div class="row">Attack <input step=".1" max="5" :value="attack"
                     @change="(e: Event) => onAttackChange((e.currentTarget as HTMLInputElement).valueAsNumber)"
                     type="range" /> {{ attack }}
