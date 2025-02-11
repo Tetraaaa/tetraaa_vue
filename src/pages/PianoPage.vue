@@ -168,12 +168,13 @@ function loadInstruments() {
             <div v-for="note, inx in PIANO_ROLL"
                 :style="{ zIndex: 100 - inx, background: heldNotes.includes(note.englishNotation) ? `linear-gradient(45deg, ivory, #7d65c5)` : '' }"
                 @mousedown="attackNote(note,
-                    0.75)" @mouseup="releaseNote(note)" class="note">
+                    0.75)" @mouseup="releaseNote(note)" @mouseleave="releaseNote(note)" class="note">
                 <div :style="{ background: heldNotes.includes(note.englishNotation[0] + '#' + note.englishNotation[1]) ? `linear-gradient(45deg, black, #7d65c5)` : '' }"
                     @mousedown="(e) => {
                         e.stopPropagation(); attackNote(midiIndexToNote(note.midiIndex + 1),
                             0.75)
-                    }" @mouseup="releaseNote(midiIndexToNote(note.midiIndex + 1))" class="note black"
+                    }" @mouseup="releaseNote(midiIndexToNote(note.midiIndex + 1))"
+                    @mouseleave="releaseNote(midiIndexToNote(note.midiIndex + 1))" class="note black"
                     v-if="!note.englishNotation.includes('E') && !note.englishNotation.includes('B')">
                 </div>
             </div>
