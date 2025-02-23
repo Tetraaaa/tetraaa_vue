@@ -7,10 +7,10 @@ import StatusCardSubtitle from "@/components/StatusPage/StatusCardSubtitle.vue";
 import StatusCardTitle from "@/components/StatusPage/StatusCardTitle.vue";
 import StatusProgressBar from "@/components/StatusPage/StatusProgressBar.vue";
 import StatusRow from "@/components/StatusPage/StatusRow.vue";
-import { getStatus, } from "@/utils/status";
+import { getStatus, type Status, } from "@/utils/status";
 import { onMounted, ref } from "vue";
 
-const data = ref()
+const data = ref<Status>()
 
 function secondsToHumanReadable(seconds?: number) {
     if(!seconds)  return '0s'
@@ -23,10 +23,10 @@ function secondsToHumanReadable(seconds?: number) {
     return days + 'j' + hours%24 + 'hr' + minutes%60 + 'mn' + seconds%60 + 's'
 }
 
-function memoryUsedToPercentage() {
-    if(!data.value?.memTotal || !data.value?.memFree) return 0
-    let memoryUsed = data.value.memTotal - data.value.memFree
-    return Math.floor(memoryUsed * 100 / data.value.memTotal)
+function memoryUsedToPercentage(memTotal?: number, memFree?:number) {
+    if(!memTotal || !memFree) return 0
+    let memoryUsed = memTotal - memFree
+    return Math.floor(memoryUsed * 100 / memTotal)
 }
 
 onMounted(() => {
@@ -47,25 +47,24 @@ onMounted(() => {
         </h3>
         <Row style="width: 100%;padding: 1rem;">
             <StatusCard>
-                <StatusCardTitle title="Informations système" />
+                <StatusCardTitle title="Backend" />
+                <StatusRow label="Statut" :value="data ? '🟢 Online' : '🔴 Offline' " />
                 <StatusRow label="Uptime" :value="secondsToHumanReadable(data?.uptime)" />
                 <StatusRow label="CPU Temp" :value="`${data?.cpuTemp || ' - '}°C`" />
-                <StatusRow label="Statut" :value="data ? '🟢 Online' : '🔴 Offline' " />
                 <StatusCardSubtitle subtitle="CPU Usage" />
                 <Column>
                     <StatusProgressBar v-for="cpu, inx in data?.cpus || [0,0,0,0]" :label="'CPU ' + inx" :value="cpu" />
                 </Column>
                 <StatusCardSubtitle subtitle="Memory Usage" />
-                <StatusProgressBar label="Memory used" :value="memoryUsedToPercentage()" />
+                <StatusProgressBar label="Memory used" :value="memoryUsedToPercentage(data?.memTotal, data?.memFree)" />
             </StatusCard>
             <StatusCard>
                 <StatusCardTitle title="Peribot" />
-                <StatusRow label="Uptime" value="1day, 2hr, 11mn, 31s" />
-                <StatusRow label="Statut" value="🟢 Online" />
-                <StatusCardSubtitle subtitle="CPU Usage" />
-                <StatusProgressBar label="CPU" :value="5" />
-                <StatusCardSubtitle subtitle="Memory Usage" />
-                <StatusProgressBar label="Memory used" :value="57" />
+                <StatusRow label="Statut" :value="data?.peribotStatus.status === 'running' ? '🟢 Online' : '🔴 Offline' " />
+                <StatusRow label="Uptime" :value="secondsToHumanReadable(data?.peribotStatus.uptime)" />
+                <StatusCardSubtitle subtitle="Souvenirs en cache" />
+                <StatusRow label="Channels en cache" :value="data?.peribotStatus.cachedChannels.toString() || '0'" />
+                <StatusRow label="Souvenirs totaux" :value="data?.peribotStatus.totalAttachments.toString() || '0'" />
             </StatusCard>
         </Row>
     </div>
