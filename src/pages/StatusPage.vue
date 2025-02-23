@@ -1,21 +1,39 @@
 <script setup lang="ts">
 import BackButton from "@/components/BackButton.vue";
 import Column from "@/components/Column.vue";
-import Col from "@/components/Column.vue";
 import Row from "@/components/Row.vue";
 import StatusCard from "@/components/StatusPage/StatusCard.vue";
 import StatusCardSubtitle from "@/components/StatusPage/StatusCardSubtitle.vue";
 import StatusCardTitle from "@/components/StatusPage/StatusCardTitle.vue";
 import StatusProgressBar from "@/components/StatusPage/StatusProgressBar.vue";
 import StatusRow from "@/components/StatusPage/StatusRow.vue";
+import { getStatus, } from "@/utils/status";
+import { onMounted, ref } from "vue";
 
-const cpus = [
-    51,
-    23,
-    31,
-    21
-]
-const memoryUsage = 31
+const data = ref()
+
+function secondsToHumanReadable(seconds?: number) {
+    if(!seconds)  return '0s'
+    if (seconds < 60) return seconds + 's'
+    let minutes = Math.floor(seconds/60)
+    if (minutes < 60) return minutes + 'mn' + seconds%60 + 's'
+    let hours = Math.floor(minutes/60)
+    if (hours < 24) return hours + 'hr' + minutes%60 + 'mn' + seconds%60 + 's'
+    let days = Math.floor(hours/24)
+    return days + 'j' + hours%24 + 'hr' + minutes%60 + 'mn' + seconds%60 + 's'
+}
+
+function memoryUsedToPercentage() {
+    if(!data.value?.memTotal || !data.value?.memFree) return 0
+    let memoryUsed = data.value.memTotal - data.value.memFree
+    return Math.floor(memoryUsed * 100 / data.value.memTotal)
+}
+
+onMounted(() => {
+    getStatus().then(val => data.value = val)
+})
+
+
 </script>
 
 <template>
@@ -30,14 +48,15 @@ const memoryUsage = 31
         <Row style="width: 100%;padding: 1rem;">
             <StatusCard>
                 <StatusCardTitle title="Informations système" />
-                <StatusRow label="Uptime" value="1hr, 53mn, 12s" />
-                <StatusRow label="CPU Temp" value="51°C" />
+                <StatusRow label="Uptime" :value="secondsToHumanReadable(data?.uptime)" />
+                <StatusRow label="CPU Temp" :value="`${data?.cpuTemp || ' - '}°C`" />
+                <StatusRow label="Statut" :value="data ? '🟢 Online' : '🔴 Offline' " />
                 <StatusCardSubtitle subtitle="CPU Usage" />
                 <Column>
-                    <StatusProgressBar v-for="cpu, inx in cpus" :label="'CPU ' + inx" :value="cpu" />
+                    <StatusProgressBar v-for="cpu, inx in data?.cpus || [0,0,0,0]" :label="'CPU ' + inx" :value="cpu" />
                 </Column>
                 <StatusCardSubtitle subtitle="Memory Usage" />
-                <StatusProgressBar label="Memory used" :value="memoryUsage" />
+                <StatusProgressBar label="Memory used" :value="memoryUsedToPercentage()" />
             </StatusCard>
             <StatusCard>
                 <StatusCardTitle title="Peribot" />
