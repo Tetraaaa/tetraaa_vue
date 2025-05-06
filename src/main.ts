@@ -79,7 +79,7 @@ import nierBackgroundMusic from "./assets/audio/music.ogg";
 import nierBackgroundVoices from "./assets/audio/vocals.ogg";
 import App from "./App.vue";
 
-const DEFAULT_VOLUME = 0.3; //Volume maximal de la musique et des voix
+const DEFAULT_VOLUME = 0.8; //Volume maximal de la musique et des voix
 const TRANSITION_TIME_IN_MILISECONDS = 800; //Réduire pour accélérer la vitesse des transitions musicales, augmenter pour les ralentir
 
 const backroundMusicPlaying = ref(false);
